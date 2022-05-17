@@ -1,0 +1,6 @@
+type Data @model {
+	id: ID!
+	name: String!
+	barcode: String
+	score1: String
+}
