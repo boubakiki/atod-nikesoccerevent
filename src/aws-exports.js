@@ -27,7 +27,9 @@ const awsmobile = {
     },
     "aws_cognito_verification_mechanisms": [
         "EMAIL"
-    ]
+    ],
+    "aws_user_files_s3_bucket": "atodnikesoccerevent1614108569de4ac6b39e811b2477150448-dev",
+    "aws_user_files_s3_bucket_region": "ap-northeast-2"
 };
 
 

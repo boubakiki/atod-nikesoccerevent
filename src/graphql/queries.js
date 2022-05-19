@@ -6,8 +6,14 @@ export const getData = /* GraphQL */ `
     getData(id: $id) {
       id
       name
-      barcode
-      score1
+      height
+      position
+      hp
+      pScore
+      rScore
+      sScore
+      grade
+      image
       createdAt
       updatedAt
     }
@@ -23,8 +29,14 @@ export const listDatas = /* GraphQL */ `
       items {
         id
         name
-        barcode
-        score1
+        height
+        position
+        hp
+        pScore
+        rScore
+        sScore
+        grade
+        image
         createdAt
         updatedAt
       }

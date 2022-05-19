@@ -1,0 +1,16 @@
+{
+  "resourceName": "atodnikesoccerimagestorage",
+  "policyUUID": "30c11476",
+  "bucketName": "atodnikesoccerevent1614108569de4ac6b39e811b2477",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

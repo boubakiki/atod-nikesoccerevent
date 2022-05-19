@@ -4,13 +4,13 @@ import { createData } from "./graphql/mutations";
 import { listDatas } from "./graphql/queries";
 
 import { Authenticator } from "@aws-amplify/ui-react";
-// import "@aws-amplify/ui-react/styles.css";
+import "@aws-amplify/ui-react/styles.css";
 import "./App.css";
 
 import awsExports from "./aws-exports";
 Amplify.configure(awsExports);
 
-const initialState = { name: "", barcode: "", score1: "" };
+const initialState = { name: "", height: "" };
 
 const App = () => {
 	const [formState, setFormState] = useState(initialState);
@@ -36,7 +36,7 @@ const App = () => {
 
 	async function addData() {
 		try {
-			if (!formState.name || !formState.score1) return;
+			if (!formState.name || !formState.height) return;
 			const data = { ...formState };
 			setDatas([...datas, data]);
 			setFormState(initialState);
@@ -48,15 +48,6 @@ const App = () => {
 
 	return (
 		<>
-			<div>
-				<h1
-					style={{
-						fontFamily: "LG Smart KR",
-					}}
-				>
-					동해물과 백두산이 마르고 <br />
-				</h1>
-			</div>
 			<Authenticator>
 				{({ signOut, user }) => (
 					<div style={styles.container}>
@@ -71,11 +62,11 @@ const App = () => {
 						/>
 						<input
 							onChange={(event) =>
-								setInput("score1", event.target.value)
+								setInput("height", event.target.value)
 							}
 							style={styles.input}
-							value={formState.score1}
-							placeholder="score1"
+							value={formState.height}
+							placeholder="height"
 						/>
 						<button style={styles.button} onClick={addData}>
 							Create Data
@@ -86,7 +77,7 @@ const App = () => {
 								style={styles.data}
 							>
 								<p style={styles.dataName}>{data.name}</p>
-								<p style={styles.dataScore1}>{data.score1}</p>
+								<p style={styles.dataHeight}>{data.height}</p>
 							</div>
 						))}
 					</div>

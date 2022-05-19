@@ -1,6 +1,12 @@
 type Data @model {
 	id: ID!
 	name: String!
-	barcode: String
-	score1: String
+	height: String!
+	position: String
+	hp: String
+	pScore: String
+	rScore: String
+	sScore: String
+	grade: String
+	image: String
 }

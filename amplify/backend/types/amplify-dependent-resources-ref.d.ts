@@ -16,5 +16,19 @@ export type AmplifyDependentResourcesAttributes = {
             "AppClientID": "string",
             "CreatedSNSRole": "string"
         }
+    },
+    "storage": {
+        "atodnikesoccerimagestorage": {
+            "BucketName": "string",
+            "Region": "string"
+        }
+    },
+    "function": {
+        "atodnseSendSms": {
+            "Name": "string",
+            "Arn": "string",
+            "Region": "string",
+            "LambdaExecutionRole": "string"
+        }
     }
 }

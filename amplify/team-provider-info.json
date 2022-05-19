@@ -13,7 +13,17 @@
     },
     "categories": {
       "auth": {
-        "atodnikesoccerevent59727a5f": {}
+        "atodnikesoccerevent59727a5f": {},
+        "true": {}
+      },
+      "function": {
+        "atodnseSendSms": {
+          "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
+          "s3Key": "amplify-builds/atodnseSendSms-4e573147563172566c76-build.zip",
+          "smsApiKey": "NCS9AE5QNDFTRAVD",
+          "endUrl": "https://api.coolsms.co.kr/sms/1.5/send",
+          "smsApiSecret": "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC"
+        }
       }
     }
   },

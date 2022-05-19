@@ -9,8 +9,14 @@ export const createData = /* GraphQL */ `
     createData(input: $input, condition: $condition) {
       id
       name
-      barcode
-      score1
+      height
+      position
+      hp
+      pScore
+      rScore
+      sScore
+      grade
+      image
       createdAt
       updatedAt
     }
@@ -24,8 +30,14 @@ export const updateData = /* GraphQL */ `
     updateData(input: $input, condition: $condition) {
       id
       name
-      barcode
-      score1
+      height
+      position
+      hp
+      pScore
+      rScore
+      sScore
+      grade
+      image
       createdAt
       updatedAt
     }
@@ -39,8 +51,14 @@ export const deleteData = /* GraphQL */ `
     deleteData(input: $input, condition: $condition) {
       id
       name
-      barcode
-      score1
+      height
+      position
+      hp
+      pScore
+      rScore
+      sScore
+      grade
+      image
       createdAt
       updatedAt
     }

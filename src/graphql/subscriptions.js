@@ -6,8 +6,14 @@ export const onCreateData = /* GraphQL */ `
     onCreateData {
       id
       name
-      barcode
-      score1
+      height
+      position
+      hp
+      pScore
+      rScore
+      sScore
+      grade
+      image
       createdAt
       updatedAt
     }
@@ -18,8 +24,14 @@ export const onUpdateData = /* GraphQL */ `
     onUpdateData {
       id
       name
-      barcode
-      score1
+      height
+      position
+      hp
+      pScore
+      rScore
+      sScore
+      grade
+      image
       createdAt
       updatedAt
     }
@@ -30,8 +42,14 @@ export const onDeleteData = /* GraphQL */ `
     onDeleteData {
       id
       name
-      barcode
-      score1
+      height
+      position
+      hp
+      pScore
+      rScore
+      sScore
+      grade
+      image
       createdAt
       updatedAt
     }
