@@ -30,7 +30,7 @@ const App = () => {
 			const datas = data.data.listDatas.items;
 			setDatas(datas);
 		} catch (err) {
-			console.log("error fetching datas");
+			console.log("error fetching datas:", err);
 		}
 	}
 
