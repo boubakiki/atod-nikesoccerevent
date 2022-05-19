@@ -4,7 +4,8 @@ import { createData } from "./graphql/mutations";
 import { listDatas } from "./graphql/queries";
 
 import { Authenticator } from "@aws-amplify/ui-react";
-import "@aws-amplify/ui-react/styles.css";
+// import "@aws-amplify/ui-react/styles.css";
+import "./App.css";
 
 import awsExports from "./aws-exports";
 Amplify.configure(awsExports);
@@ -46,41 +47,52 @@ const App = () => {
 	}
 
 	return (
-		<Authenticator>
-			{({ signOut, user }) => (
-				<div style={styles.container}>
-					<h2>Amplify Datas</h2>
-					<input
-						onChange={(event) =>
-							setInput("name", event.target.value)
-						}
-						style={styles.input}
-						value={formState.name}
-						placeholder="Name"
-					/>
-					<input
-						onChange={(event) =>
-							setInput("score1", event.target.value)
-						}
-						style={styles.input}
-						value={formState.score1}
-						placeholder="score1"
-					/>
-					<button style={styles.button} onClick={addData}>
-						Create Data
-					</button>
-					{datas.map((data, index) => (
-						<div
-							key={data.id ? data.id : index}
-							style={styles.data}
-						>
-							<p style={styles.dataName}>{data.name}</p>
-							<p style={styles.dataScore1}>{data.score1}</p>
-						</div>
-					))}
-				</div>
-			)}
-		</Authenticator>
+		<>
+			<div>
+				<h1
+					style={{
+						fontFamily: "LG Smart KR",
+					}}
+				>
+					동해물과 백두산이 마르고 <br />
+				</h1>
+			</div>
+			<Authenticator>
+				{({ signOut, user }) => (
+					<div style={styles.container}>
+						<h2>Amplify Datas</h2>
+						<input
+							onChange={(event) =>
+								setInput("name", event.target.value)
+							}
+							style={styles.input}
+							value={formState.name}
+							placeholder="Name"
+						/>
+						<input
+							onChange={(event) =>
+								setInput("score1", event.target.value)
+							}
+							style={styles.input}
+							value={formState.score1}
+							placeholder="score1"
+						/>
+						<button style={styles.button} onClick={addData}>
+							Create Data
+						</button>
+						{datas.map((data, index) => (
+							<div
+								key={data.id ? data.id : index}
+								style={styles.data}
+							>
+								<p style={styles.dataName}>{data.name}</p>
+								<p style={styles.dataScore1}>{data.score1}</p>
+							</div>
+						))}
+					</div>
+				)}
+			</Authenticator>
+		</>
 	);
 };
 

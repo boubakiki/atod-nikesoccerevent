@@ -1,3 +1,11 @@
+@font-face {
+	font-family: LG Smart KR;
+	src: url(./fonts/LGSmHaL_kr.eot) format('embedded-opentype'),
+       url(./fonts/LGSmHaL_kr.woff) format('woff'),
+		   url(./fonts/LGSmHaL_kr.woff2) format('woff2'),
+		   url(./fonts/LGSmHaL_kr.ttf) format('truetype')
+}
+
 .App {
   text-align: center;
 }
