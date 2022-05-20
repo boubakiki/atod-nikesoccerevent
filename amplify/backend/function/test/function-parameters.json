@@ -1,3 +1,13 @@
 {
-  "lambdaLayers": []
+  "lambdaLayers": [],
+  "permissions": {
+    "storage": {
+      "atodnikesoccerimagestorage": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  }
 }

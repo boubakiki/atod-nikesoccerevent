@@ -10,6 +10,7 @@
   "dependencies": {
     "aws-sdk": "^2.1138.0",
     "axios": "^0.27.2",
+    "coolsms-node-sdk": "^2.0.1",
     "crypto": "^1.0.1",
     "crypto-js": "^4.1.1",
     "node-blob": "^0.0.2",

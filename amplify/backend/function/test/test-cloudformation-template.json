@@ -15,6 +15,10 @@
     },
     "s3Key": {
       "Type": "String"
+    },
+    "storageatodnikesoccerimagestorageBucketName": {
+      "Type": "String",
+      "Default": "storageatodnikesoccerimagestorageBucketName"
     }
   },
   "Conditions": {
@@ -69,6 +73,9 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
+            },
+            "STORAGE_ATODNIKESOCCERIMAGESTORAGE_BUCKETNAME": {
+              "Ref": "storageatodnikesoccerimagestorageBucketName"
             }
           }
         },
@@ -160,6 +167,64 @@
                   }
                 ]
               }
+            }
+          ]
+        }
+      }
+    },
+    "AmplifyResourcesPolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-lambda-execution-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": "s3:ListBucket",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:s3:::",
+                      {
+                        "Ref": "storageatodnikesoccerimagestorageBucketName"
+                      }
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:DeleteObject"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:s3:::",
+                      {
+                        "Ref": "storageatodnikesoccerimagestorageBucketName"
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
             }
           ]
         }

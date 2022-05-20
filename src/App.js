@@ -73,15 +73,16 @@ const App = () => {
 
 		const timestamp = Date.now();
 		const salt = uniqid();
-
-		const message = timestamp + salt; //전달할 샘플 메시지
-		const key = "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC"; //암호화에 사용할 샘플 키값
-		console.log(key);
-		const signature = cryptoJs.HmacMD5(message, key).toString();
+		const key = "NCS9AE5QNDFTRAVD";
+		const datetime = new Date().toISOString();
+		const message = datetime + salt; //전달할 샘플 메시지
+		const secret = "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC"; //암호화에 사용할 샘플 키값
+		console.log(secret);
+		const signature = cryptoJs.HmacSHA256(message, secret).toString();
 
 		formData.set("image", barcode);
-		formData.set("api_key", "NCS9AE5QNDFTRAVD");
-		formData.set("api_secret", key);
+		formData.set("api_key", key);
+		formData.set("api_secret", secret);
 		formData.set("timestamp", timestamp);
 		formData.set("salt", salt);
 		formData.set("signature", signature);
@@ -93,13 +94,16 @@ const App = () => {
 		formData.set("image", barcode);
 
 		await axios
-			.post("https://api.coolsms.co.kr/sms/1.5/send", formData, {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					"Access-Control-Allow-Origin": "*",
-					"Access-Control-Allow-Headers": "*",
+			.post(
+				"https://api.coolsms.co.kr/storage/v1/files",
+				{ file: frame.Body },
+				{
+					headers: {
+						Authorization: `HMAC-SHA256 apiKey=${key}, date=${datetime}, salt=${salt}, signature=${signature}`,
+						"Content-Type": "application/json",
+					},
 				},
-			})
+			)
 			.then((res) => {
 				console.log(res);
 			})

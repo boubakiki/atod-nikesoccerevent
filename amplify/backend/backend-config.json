@@ -101,7 +101,16 @@
     "test": {
       "build": true,
       "providerPlugin": "awscloudformation",
-      "service": "Lambda"
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "atodnikesoccerimagestorage",
+          "attributes": [
+            "BucketName"
+          ]
+        }
+      ]
     }
   }
 }
