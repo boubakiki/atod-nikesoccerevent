@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "api": {
+      "atodnikesoccerevent": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "storage": {
+      "atodnikesoccerimagestorage": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": [],
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "apiSecret",
+      "environmentVariableName": "API_SECRET"
+    },
+    {
+      "cloudFormationParameterName": "apiKey",
+      "environmentVariableName": "API_KEY"
+    },
+    {
+      "cloudFormationParameterName": "apiUrl",
+      "environmentVariableName": "API_URL"
+    }
+  ]
+}

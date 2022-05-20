@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
-import Amplify, { API, graphqlOperation } from "aws-amplify";
+import Amplify, { Storage, API, graphqlOperation } from "aws-amplify";
 import { createData } from "./graphql/mutations";
 import { listDatas } from "./graphql/queries";
+
+import axios from "axios";
+import uniqid from "uniqid";
+import cryptoJs from "crypto-js";
 
 import { Authenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
@@ -15,6 +19,7 @@ const initialState = { name: "", height: "" };
 const App = () => {
 	const [formState, setFormState] = useState(initialState);
 	const [datas, setDatas] = useState([]);
+	const [file, setFile] = useState([]);
 
 	useEffect(() => {
 		fetchDatas();
@@ -46,8 +51,83 @@ const App = () => {
 		}
 	}
 
+	const handleUpload = (e) => {
+		e.preventDefault();
+		const file = e.target.files[0];
+		console.log(file);
+		console.log(typeof file);
+		setFile(file);
+	};
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		const formData = new FormData();
+
+		const frame = await Storage.get("barcode_frame.png", {
+			download: true,
+		});
+
+		const barcode = new File([frame.Body], "barcode.png", {
+			type: "image/png",
+		});
+
+		const timestamp = Date.now();
+		const salt = uniqid();
+
+		const message = timestamp + salt; //전달할 샘플 메시지
+		const key = "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC"; //암호화에 사용할 샘플 키값
+		console.log(key);
+		const signature = cryptoJs.HmacMD5(message, key).toString();
+
+		formData.set("image", barcode);
+		formData.set("api_key", "NCS9AE5QNDFTRAVD");
+		formData.set("api_secret", key);
+		formData.set("timestamp", timestamp);
+		formData.set("salt", salt);
+		formData.set("signature", signature);
+		formData.set("to", "01068505282");
+		formData.set("from", "01068505282");
+		formData.set("subject", "나이키풋볼이벤트테스트");
+		formData.set("text", "나이키풋볼이벤트테스트");
+		formData.set("type", "MMS");
+		formData.set("image", barcode);
+
+		await axios
+			.post("https://api.coolsms.co.kr/sms/1.5/send", formData, {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					"Access-Control-Allow-Origin": "*",
+					"Access-Control-Allow-Headers": "*",
+				},
+			})
+			.then((res) => {
+				console.log(res);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+
+		// 저장
+	};
+
 	return (
 		<>
+			<form
+				name="photo"
+				encType="multipart/form-data"
+				// onSubmit={handleSubmit}
+				// id="loginForm"
+			>
+				<input
+					type="file"
+					name="photo"
+					accept="image/*,"
+					onChange={handleUpload}
+				/>
+			</form>
+			<button type="submit" onClick={handleSubmit}>
+				제출하기
+			</button>
 			<Authenticator>
 				{({ signOut, user }) => (
 					<div style={styles.container}>

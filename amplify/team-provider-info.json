@@ -22,7 +22,21 @@
           "s3Key": "amplify-builds/atodnseSendSms-4e573147563172566c76-build.zip",
           "smsApiKey": "NCS9AE5QNDFTRAVD",
           "endUrl": "https://api.coolsms.co.kr/sms/1.5/send",
-          "smsApiSecret": "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC"
+          "smsApiSecret": "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC",
+          "apiSecret": "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC",
+          "apiKey": "NCS9AE5QNDFTRAVD",
+          "apiUrl": "https://api.coolsms.co.kr/sms/1.5/send"
+        },
+        "atodNseSendSms": {
+          "apiSecret": "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC",
+          "apiKey": "NCS9AE5QNDFTRAVD",
+          "apiUrl": "https://api.coolsms.co.kr/sms/1.5/send",
+          "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
+          "s3Key": "amplify-builds/atodNseSendSms-5a6a5a504f7a31315163-build.zip"
+        },
+        "test": {
+          "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
+          "s3Key": "amplify-builds/test-304f497548645253682b-build.zip"
         }
       }
     }
