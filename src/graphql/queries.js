@@ -7,6 +7,7 @@ export const getData = /* GraphQL */ `
       id
       name
       height
+      phoneNumber
       position
       hp
       pScore
@@ -30,6 +31,7 @@ export const listDatas = /* GraphQL */ `
         id
         name
         height
+        phoneNumber
         position
         hp
         pScore

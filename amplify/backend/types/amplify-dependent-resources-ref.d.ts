@@ -3,11 +3,6 @@ export type AmplifyDependentResourcesAttributes = {
         "atodnikesoccerevent": {
             "GraphQLAPIIdOutput": "string",
             "GraphQLAPIEndpointOutput": "string"
-        },
-        "testapi": {
-            "RootUrl": "string",
-            "ApiName": "string",
-            "ApiId": "string"
         }
     },
     "auth": {
@@ -29,13 +24,13 @@ export type AmplifyDependentResourcesAttributes = {
         }
     },
     "function": {
-        "atodNseSendSms": {
+        "atodNseSendMms": {
             "Name": "string",
             "Arn": "string",
             "Region": "string",
             "LambdaExecutionRole": "string"
         },
-        "test": {
+        "atodNseSaveResult": {
             "Name": "string",
             "Arn": "string",
             "Region": "string",

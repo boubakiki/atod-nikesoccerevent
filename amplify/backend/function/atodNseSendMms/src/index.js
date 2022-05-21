@@ -1,12 +1,7 @@
 /* Amplify Params - DO NOT EDIT
 	ENV
 	REGION
-	API_ATODNIKESOCCEREVENT_GRAPHQLAPIIDOUTPUT
-	API_ATODNIKESOCCEREVENT_GRAPHQLAPIENDPOINTOUTPUT
-	API_ATODNIKESOCCEREVENT_GRAPHQLAPIKEYOUTPUT
 	STORAGE_ATODNIKESOCCERIMAGESTORAGE_BUCKETNAME
-	API_KEY
-	API_SECRET
 Amplify Params - DO NOT EDIT */
 
 const AWS = require("aws-sdk");
@@ -20,20 +15,22 @@ const cryptoJs = require("crypto-js");
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 exports.handler = (event) => {
-	console.log(event);
+	console.log(`EVENT: ${JSON.stringify(event)}`);
+
 	try {
 		event.Records.forEach(async (record) => {
 			console.log(record);
 
-			if (record.eventName === "INSERT") {
-				const id = record.dynamodb.NewImage.id.S;
-				const name = record.dynamodb.NewImage.name.S;
-				const height = record.dynamodb.NewImage.height.S;
+			if (record.eventName === "ObjectCreated:Put") {
+				const storageKey = record.s3.object.key;
+				const bucketName = record.s3.bucket.name;
+				const phoneNumber = storageKey
+					.replace("public/", "")
+					.replace(".jpg", "");
 
 				const params = {
-					Bucket: process.env
-						.STORAGE_ATODNIKESOCCERIMAGESTORAGE_BUCKETNAME,
-					Key: "public/barcode_frame.png",
+					Bucket: bucketName,
+					Key: storageKey,
 				};
 
 				const imageObject = await Promise.all([
@@ -41,14 +38,6 @@ exports.handler = (event) => {
 				]);
 
 				console.log(imageObject);
-
-				// console.log("data:image/jpeg;base64," + encode(imageObject.Body))
-
-				// const blob = new Blob([imageObject.Body], {
-				// 	type: imageObject.ContentType,
-				// });
-
-				// console.log(blob);
 
 				const salt = uniqid();
 				const key = "NCS9AE5QNDFTRAVD";
@@ -59,9 +48,29 @@ exports.handler = (event) => {
 					.HmacSHA256(message, secret)
 					.toString();
 
-				console.log("signature:" + signature);
+				let fileId;
 
-				const apiResult = await axios({
+				await axios({
+					url: "https://api.coolsms.co.kr/storage/v1/files",
+					headers: {
+						Authorization: `HMAC-SHA256 apiKey=${key}, date=${datetime}, salt=${salt}, signature=${signature}`,
+						"Content-Type": "application/json",
+					},
+					method: "post",
+					data: {
+						file: imageObject[0].Body.toString("base64"),
+						type: "MMS",
+					},
+				})
+					.then((res) => {
+						console.log(res);
+						fileId = res.data.fileId;
+					})
+					.catch((err) => {
+						console.error(err);
+					});
+
+				await axios({
 					url: "http://api.coolsms.co.kr/messages/v4/send",
 					method: "post",
 					headers: {
@@ -70,30 +79,29 @@ exports.handler = (event) => {
 					},
 					data: {
 						message: {
-							to: "01068505282",
+							to: phoneNumber,
 							from: "01068505282",
-							subject: "나이키풋볼이벤트테스트",
-							text: "나이키풋볼이벤트테스트",
+							// subject: "나이키풋볼이벤트테스트",
+							text: "QR 코드를 사용해서 게임을 즐기세요",
 							type: "MMS",
-							imageId: "ST01FZ220520112152458qmTH1uzvH72",
+							imageId: fileId,
 						},
 					},
 				})
-					.then((reponse) => {
-						console.log(reponse);
+					.then((res) => {
+						console.log(res);
 					})
-					.catch((error) => {
-						console.error(error);
+					.catch((err) => {
+						console.error(err);
 					});
 			}
 		});
-		// return Promise.resolve("Successfully processed DynamoDB record");
 		return {
 			statusCode: 200,
 			body: JSON.stringify("Complete!!"),
 		};
 	} catch (err) {
-		console.log("error Send SMS: ", err);
+		console.log("error Send MMS: ", err);
 
 		return {
 			statusCode: 200,

@@ -10,6 +10,7 @@ export const createData = /* GraphQL */ `
       id
       name
       height
+      phoneNumber
       position
       hp
       pScore
@@ -31,6 +32,7 @@ export const updateData = /* GraphQL */ `
       id
       name
       height
+      phoneNumber
       position
       hp
       pScore
@@ -52,6 +54,7 @@ export const deleteData = /* GraphQL */ `
       id
       name
       height
+      phoneNumber
       position
       hp
       pScore

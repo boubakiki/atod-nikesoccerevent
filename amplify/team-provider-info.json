@@ -9,7 +9,8 @@
       "UnauthRoleName": "amplify-atodnikesoccerevent-dev-150448-unauthRole",
       "StackName": "amplify-atodnikesoccerevent-dev-150448",
       "StackId": "arn:aws:cloudformation:ap-northeast-2:618435685871:stack/amplify-atodnikesoccerevent-dev-150448/428cc820-d5a7-11ec-b5fc-06700f6367be",
-      "AmplifyAppId": "d223ys0cwg3oll"
+      "AmplifyAppId": "d223ys0cwg3oll",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-atodnikesoccerevent-dev-150448-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
       "auth": {
@@ -27,16 +28,13 @@
           "apiKey": "NCS9AE5QNDFTRAVD",
           "apiUrl": "https://api.coolsms.co.kr/sms/1.5/send"
         },
-        "atodNseSendSms": {
-          "apiSecret": "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC",
-          "apiKey": "NCS9AE5QNDFTRAVD",
-          "apiUrl": "https://api.coolsms.co.kr/sms/1.5/send",
+        "atodNseSendMms": {
           "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
-          "s3Key": "amplify-builds/atodNseSendSms-532b724b775954526665-build.zip"
+          "s3Key": "amplify-builds/atodNseSendMms-426a2f734b55466f4f74-build.zip"
         },
-        "test": {
+        "atodNseSaveResult": {
           "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
-          "s3Key": "amplify-builds/test-5163414e424972354774-build.zip"
+          "s3Key": "amplify-builds/atodNseSaveResult-3657584b673465346f38-build.zip"
         }
       }
     }

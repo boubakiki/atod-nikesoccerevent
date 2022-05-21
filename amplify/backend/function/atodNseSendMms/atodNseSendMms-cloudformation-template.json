@@ -16,30 +16,9 @@
     "s3Key": {
       "Type": "String"
     },
-    "apiatodnikesoccereventGraphQLAPIIdOutput": {
-      "Type": "String",
-      "Default": "apiatodnikesoccereventGraphQLAPIIdOutput"
-    },
-    "apiatodnikesoccereventGraphQLAPIEndpointOutput": {
-      "Type": "String",
-      "Default": "apiatodnikesoccereventGraphQLAPIEndpointOutput"
-    },
-    "apiatodnikesoccereventGraphQLAPIKeyOutput": {
-      "Type": "String",
-      "Default": "apiatodnikesoccereventGraphQLAPIKeyOutput"
-    },
     "storageatodnikesoccerimagestorageBucketName": {
       "Type": "String",
       "Default": "storageatodnikesoccerimagestorageBucketName"
-    },
-    "apiSecret": {
-      "Type": "String"
-    },
-    "apiKey": {
-      "Type": "String"
-    },
-    "apiUrl": {
-      "Type": "String"
     }
   },
   "Conditions": {
@@ -72,12 +51,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "atodNseSendSms",
+            "atodNseSendMms",
             {
               "Fn::Join": [
                 "",
                 [
-                  "atodNseSendSms",
+                  "atodNseSendMms",
                   "-",
                   {
                     "Ref": "env"
@@ -95,26 +74,8 @@
             "REGION": {
               "Ref": "AWS::Region"
             },
-            "API_ATODNIKESOCCEREVENT_GRAPHQLAPIIDOUTPUT": {
-              "Ref": "apiatodnikesoccereventGraphQLAPIIdOutput"
-            },
-            "API_ATODNIKESOCCEREVENT_GRAPHQLAPIENDPOINTOUTPUT": {
-              "Ref": "apiatodnikesoccereventGraphQLAPIEndpointOutput"
-            },
-            "API_ATODNIKESOCCEREVENT_GRAPHQLAPIKEYOUTPUT": {
-              "Ref": "apiatodnikesoccereventGraphQLAPIKeyOutput"
-            },
             "STORAGE_ATODNIKESOCCERIMAGESTORAGE_BUCKETNAME": {
               "Ref": "storageatodnikesoccerimagestorageBucketName"
-            },
-            "API_SECRET": {
-              "Ref": "apiSecret"
-            },
-            "API_KEY": {
-              "Ref": "apiKey"
-            },
-            "API_URL": {
-              "Ref": "apiUrl"
             }
           }
         },
@@ -135,12 +96,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "atodnikesoccereventLambdaRolecebb3b24",
+            "atodnikesoccereventLambdaRolecd023d4d",
             {
               "Fn::Join": [
                 "",
                 [
-                  "atodnikesoccereventLambdaRolecebb3b24",
+                  "atodnikesoccereventLambdaRolecd023d4d",
                   "-",
                   {
                     "Ref": "env"
@@ -228,59 +189,6 @@
           "Statement": [
             {
               "Effect": "Allow",
-              "Action": [
-                "appsync:Create*",
-                "appsync:StartSchemaCreation",
-                "appsync:GraphQL",
-                "appsync:Get*",
-                "appsync:List*",
-                "appsync:Update*",
-                "appsync:Delete*"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:appsync:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":apis/",
-                      {
-                        "Ref": "apiatodnikesoccereventGraphQLAPIIdOutput"
-                      },
-                      "/*"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:appsync:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":apis/",
-                      {
-                        "Ref": "apiatodnikesoccereventGraphQLAPIIdOutput"
-                      }
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
               "Action": "s3:ListBucket",
               "Resource": [
                 {
@@ -320,62 +228,6 @@
             }
           ]
         }
-      }
-    },
-    "LambdaTriggerPolicyData": {
-      "DependsOn": [
-        "LambdaExecutionRole"
-      ],
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": "amplify-lambda-execution-policy-Data",
-        "Roles": [
-          {
-            "Ref": "LambdaExecutionRole"
-          }
-        ],
-        "PolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [
-                "dynamodb:DescribeStream",
-                "dynamodb:GetRecords",
-                "dynamodb:GetShardIterator",
-                "dynamodb:ListStreams"
-              ],
-              "Resource": {
-                "Fn::ImportValue": {
-                  "Fn::Sub": "${apiatodnikesoccereventGraphQLAPIIdOutput}:GetAtt:DataTable:StreamArn"
-                }
-              }
-            }
-          ]
-        }
-      }
-    },
-    "LambdaEventSourceMappingData": {
-      "Type": "AWS::Lambda::EventSourceMapping",
-      "DependsOn": [
-        "LambdaTriggerPolicyData",
-        "LambdaExecutionRole"
-      ],
-      "Properties": {
-        "BatchSize": 100,
-        "Enabled": true,
-        "EventSourceArn": {
-          "Fn::ImportValue": {
-            "Fn::Sub": "${apiatodnikesoccereventGraphQLAPIIdOutput}:GetAtt:DataTable:StreamArn"
-          }
-        },
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "LambdaFunction",
-            "Arn"
-          ]
-        },
-        "StartingPosition": "LATEST"
       }
     }
   },

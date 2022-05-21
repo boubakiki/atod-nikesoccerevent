@@ -17,20 +17,6 @@
           "additionalAuthenticationProviders": []
         }
       }
-    },
-    "testapi": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "test",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        }
-      ]
     }
   },
   "auth": {
@@ -63,23 +49,31 @@
     "atodnikesoccerimagestorage": {
       "service": "S3",
       "providerPlugin": "awscloudformation",
-      "dependsOn": []
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "atodNseSendMms",
+          "attributes": [
+            "Name",
+            "Arn",
+            "LambdaExecutionRole"
+          ]
+        }
+      ]
     }
   },
   "function": {
-    "atodNseSendSms": {
+    "atodNseSendMms": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
+    },
+    "atodNseSaveResult": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
       "dependsOn": [
-        {
-          "category": "api",
-          "resourceName": "atodnikesoccerevent",
-          "attributes": [
-            "GraphQLAPIIdOutput",
-            "GraphQLAPIEndpointOutput"
-          ]
-        },
         {
           "category": "api",
           "resourceName": "atodnikesoccerevent",
@@ -87,27 +81,6 @@
             "GraphQLAPIIdOutput",
             "GraphQLAPIEndpointOutput",
             "GraphQLAPIKeyOutput"
-          ]
-        },
-        {
-          "category": "storage",
-          "resourceName": "atodnikesoccerimagestorage",
-          "attributes": [
-            "BucketName"
-          ]
-        }
-      ]
-    },
-    "test": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "atodnikesoccerimagestorage",
-          "attributes": [
-            "BucketName"
           ]
         }
       ]

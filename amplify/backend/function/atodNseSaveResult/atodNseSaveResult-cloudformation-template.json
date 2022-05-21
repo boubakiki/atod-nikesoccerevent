@@ -16,9 +16,17 @@
     "s3Key": {
       "Type": "String"
     },
-    "storageatodnikesoccerimagestorageBucketName": {
+    "apiatodnikesoccereventGraphQLAPIIdOutput": {
       "Type": "String",
-      "Default": "storageatodnikesoccerimagestorageBucketName"
+      "Default": "apiatodnikesoccereventGraphQLAPIIdOutput"
+    },
+    "apiatodnikesoccereventGraphQLAPIEndpointOutput": {
+      "Type": "String",
+      "Default": "apiatodnikesoccereventGraphQLAPIEndpointOutput"
+    },
+    "apiatodnikesoccereventGraphQLAPIKeyOutput": {
+      "Type": "String",
+      "Default": "apiatodnikesoccereventGraphQLAPIKeyOutput"
     }
   },
   "Conditions": {
@@ -51,12 +59,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "test",
+            "atodNseSaveResult",
             {
               "Fn::Join": [
                 "",
                 [
-                  "test",
+                  "atodNseSaveResult",
                   "-",
                   {
                     "Ref": "env"
@@ -74,8 +82,14 @@
             "REGION": {
               "Ref": "AWS::Region"
             },
-            "STORAGE_ATODNIKESOCCERIMAGESTORAGE_BUCKETNAME": {
-              "Ref": "storageatodnikesoccerimagestorageBucketName"
+            "API_ATODNIKESOCCEREVENT_GRAPHQLAPIIDOUTPUT": {
+              "Ref": "apiatodnikesoccereventGraphQLAPIIdOutput"
+            },
+            "API_ATODNIKESOCCEREVENT_GRAPHQLAPIENDPOINTOUTPUT": {
+              "Ref": "apiatodnikesoccereventGraphQLAPIEndpointOutput"
+            },
+            "API_ATODNIKESOCCEREVENT_GRAPHQLAPIKEYOUTPUT": {
+              "Ref": "apiatodnikesoccereventGraphQLAPIKeyOutput"
             }
           }
         },
@@ -96,12 +110,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "atodnikesoccereventLambdaRole83eb9a58",
+            "atodnikesoccereventLambdaRolee1fa5fbe",
             {
               "Fn::Join": [
                 "",
                 [
-                  "atodnikesoccereventLambdaRole83eb9a58",
+                  "atodnikesoccereventLambdaRolee1fa5fbe",
                   "-",
                   {
                     "Ref": "env"
@@ -189,38 +203,52 @@
           "Statement": [
             {
               "Effect": "Allow",
-              "Action": "s3:ListBucket",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:s3:::",
-                      {
-                        "Ref": "storageatodnikesoccerimagestorageBucketName"
-                      }
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
               "Action": [
-                "s3:PutObject",
-                "s3:GetObject",
-                "s3:DeleteObject"
+                "appsync:Create*",
+                "appsync:StartSchemaCreation",
+                "appsync:GraphQL",
+                "appsync:Get*",
+                "appsync:List*",
+                "appsync:Update*",
+                "appsync:Delete*"
               ],
               "Resource": [
                 {
                   "Fn::Join": [
                     "",
                     [
-                      "arn:aws:s3:::",
+                      "arn:aws:appsync:",
                       {
-                        "Ref": "storageatodnikesoccerimagestorageBucketName"
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":apis/",
+                      {
+                        "Ref": "apiatodnikesoccereventGraphQLAPIIdOutput"
                       },
                       "/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:appsync:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":apis/",
+                      {
+                        "Ref": "apiatodnikesoccereventGraphQLAPIIdOutput"
+                      }
                     ]
                   ]
                 }
