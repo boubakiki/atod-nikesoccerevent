@@ -13,48 +13,30 @@
       "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-atodnikesoccerevent-dev-150448-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
-      "auth": {
-        "atodnikesoccerevent59727a5f": {},
-        "true": {}
-      },
-      "function": {
-        "atodnseSendSms": {
-          "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
-          "s3Key": "amplify-builds/atodnseSendSms-4e573147563172566c76-build.zip",
-          "smsApiKey": "NCS9AE5QNDFTRAVD",
-          "endUrl": "https://api.coolsms.co.kr/sms/1.5/send",
-          "smsApiSecret": "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC",
-          "apiSecret": "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC",
-          "apiKey": "NCS9AE5QNDFTRAVD",
-          "apiUrl": "https://api.coolsms.co.kr/sms/1.5/send"
-        },
-        "atodNseSendMms": {
-          "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
-          "s3Key": "amplify-builds/atodNseSendMms-426a2f734b55466f4f74-build.zip"
-        },
-        "atodNseSaveResult": {
-          "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
-          "s3Key": "amplify-builds/atodNseSaveResult-3657584b673465346f38-build.zip"
-        }
-      }
-    }
-  },
-  "prod": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-atodnikesoccerevent-prod-155106-authRole",
-      "UnauthRoleArn": "arn:aws:iam::618435685871:role/amplify-atodnikesoccerevent-prod-155106-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::618435685871:role/amplify-atodnikesoccerevent-prod-155106-authRole",
-      "Region": "ap-northeast-2",
-      "DeploymentBucketName": "amplify-atodnikesoccerevent-prod-155106-deployment",
-      "UnauthRoleName": "amplify-atodnikesoccerevent-prod-155106-unauthRole",
-      "StackName": "amplify-atodnikesoccerevent-prod-155106",
-      "StackId": "arn:aws:cloudformation:ap-northeast-2:618435685871:stack/amplify-atodnikesoccerevent-prod-155106/b9f962f0-d5ad-11ec-ae6f-06002fb47256",
-      "AmplifyAppId": "d223ys0cwg3oll"
-    },
-    "categories": {
-      "auth": {
-        "atodnikesoccerevent59727a5f": {}
-      }
-    }
+		"auth": {
+			"atodnikesoccerevent59727a5f": {},
+			"true": {}
+		},
+		"function": {
+			"atodnseSendSms": {
+				"deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
+				"s3Key": "amplify-builds/atodnseSendSms-4e573147563172566c76-build.zip",
+				"smsApiKey": "NCS9AE5QNDFTRAVD",
+				"endUrl": "https://api.coolsms.co.kr/sms/1.5/send",
+				"smsApiSecret": "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC",
+				"apiSecret": "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC",
+				"apiKey": "NCS9AE5QNDFTRAVD",
+				"apiUrl": "https://api.coolsms.co.kr/sms/1.5/send"
+			},
+			"atodNseSendMms": {
+				"deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
+				"s3Key": "amplify-builds/atodNseSendMms-426a2f734b55466f4f74-build.zip"
+			},
+			"atodNseSaveResult": {
+				"deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
+				"s3Key": "amplify-builds/atodNseSaveResult-3657584b673465346f38-build.zip"
+			}
+		}
+	}
   }
 }
