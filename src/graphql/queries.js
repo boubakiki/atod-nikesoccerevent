@@ -14,7 +14,6 @@ export const getData = /* GraphQL */ `
       rScore
       sScore
       grade
-      image
       createdAt
       updatedAt
     }
@@ -38,7 +37,6 @@ export const listDatas = /* GraphQL */ `
         rScore
         sScore
         grade
-        image
         createdAt
         updatedAt
       }

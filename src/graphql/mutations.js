@@ -17,7 +17,6 @@ export const createData = /* GraphQL */ `
       rScore
       sScore
       grade
-      image
       createdAt
       updatedAt
     }
@@ -39,7 +38,6 @@ export const updateData = /* GraphQL */ `
       rScore
       sScore
       grade
-      image
       createdAt
       updatedAt
     }
@@ -61,7 +59,6 @@ export const deleteData = /* GraphQL */ `
       rScore
       sScore
       grade
-      image
       createdAt
       updatedAt
     }
