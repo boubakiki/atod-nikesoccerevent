@@ -18,6 +18,16 @@ const updateData = gql`
 	) {
 		updateData(input: $input, condition: $condition) {
 			id
+			name
+			height
+			phoneNumber
+			position
+			hp
+			pScore
+			rScore
+			sScore
+			grade
+			updatedAt
 		}
 	}
 `;
@@ -47,7 +57,7 @@ exports.handler = async (event) => {
 			},
 		});
 
-		console.log(updateResult);
+		console.log(updateResult.data.data.updateData);
 
 		return {
 			statusCode: 200,
@@ -55,7 +65,10 @@ exports.handler = async (event) => {
 				"Access-Control-Allow-Origin": "*",
 				"Access-Control-Allow-Headers": "*",
 			},
-			body: JSON.stringify({ data: inputData, message: "Success!" }),
+			body: JSON.stringify({
+				updatedData: updateResult.data.data.updateData,
+				message: "Success!",
+			}),
 		};
 	} catch (error) {
 		console.error(error);
@@ -65,7 +78,7 @@ exports.handler = async (event) => {
 				"Access-Control-Allow-Origin": "*",
 				"Access-Control-Allow-Headers": "*",
 			},
-			body: JSON.stringify({ data: inputData, message: "Fail!!" }),
+			body: JSON.stringify({ inputedData: inputData, message: "Fail!!" }),
 		};
 	}
 };

@@ -13,30 +13,30 @@
       "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-atodnikesoccerevent-dev-150448-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
     },
     "categories": {
-		"auth": {
-			"atodnikesoccerevent59727a5f": {},
-			"true": {}
-		},
-		"function": {
-			"atodnseSendSms": {
-				"deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
-				"s3Key": "amplify-builds/atodnseSendSms-4e573147563172566c76-build.zip",
-				"smsApiKey": "NCS9AE5QNDFTRAVD",
-				"endUrl": "https://api.coolsms.co.kr/sms/1.5/send",
-				"smsApiSecret": "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC",
-				"apiSecret": "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC",
-				"apiKey": "NCS9AE5QNDFTRAVD",
-				"apiUrl": "https://api.coolsms.co.kr/sms/1.5/send"
-			},
-			"atodNseSendMms": {
-				"deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
-				"s3Key": "amplify-builds/atodNseSendMms-426a2f734b55466f4f74-build.zip"
-			},
-			"atodNseSaveResult": {
-				"deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
-				"s3Key": "amplify-builds/atodNseSaveResult-3657584b673465346f38-build.zip"
-			}
-		}
-	}
+      "auth": {
+        "atodnikesoccerevent59727a5f": {},
+        "true": {}
+      },
+      "function": {
+        "atodnseSendSms": {
+          "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
+          "s3Key": "amplify-builds/atodnseSendSms-4e573147563172566c76-build.zip",
+          "smsApiKey": "NCS9AE5QNDFTRAVD",
+          "endUrl": "https://api.coolsms.co.kr/sms/1.5/send",
+          "smsApiSecret": "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC",
+          "apiSecret": "6SK5S6RCLYSQGNOGAMQ3ERPN0EVT0POC",
+          "apiKey": "NCS9AE5QNDFTRAVD",
+          "apiUrl": "https://api.coolsms.co.kr/sms/1.5/send"
+        },
+        "atodNseSendMms": {
+          "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
+          "s3Key": "amplify-builds/atodNseSendMms-426a2f734b55466f4f74-build.zip"
+        },
+        "atodNseSaveResult": {
+          "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
+          "s3Key": "amplify-builds/atodNseSaveResult-4c633773344f42454a6d-build.zip"
+        }
+      }
+    }
   }
 }
