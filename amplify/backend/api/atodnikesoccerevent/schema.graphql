@@ -1,12 +1,12 @@
 type Data @model {
 	id: ID!
 	name: String!
-	height: String!
+	firstName: String!
+	lastName: String!
 	phoneNumber: String!
 	position: String
-	hp: String
 	pScore: String
 	rScore: String
 	sScore: String
-	grade: String
+	tScore: String
 }

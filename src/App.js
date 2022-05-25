@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import Amplify, { Storage, API, graphqlOperation } from "aws-amplify";
 import { createData } from "./graphql/mutations";
-import { listDatas } from "./graphql/queries";
+// import { listDatas } from "./graphql/queries";
 
-import ReactDOM from "react-dom";
-import QRCode from "react-qr-code";
+import bwipjs from "bwip-js";
+import { v4 as uuid } from "uuid";
 
-import { Authenticator } from "@aws-amplify/ui-react";
-import "@aws-amplify/ui-react/styles.css";
-import "./App.css";
+import "./css/default.css";
 
 import domtoimage from "dom-to-image";
 
@@ -16,15 +14,16 @@ import awsExports from "./aws-exports";
 Amplify.configure(awsExports);
 
 const initialState = {
+	id: "",
 	name: "",
-	height: "",
+	firstName: "",
+	lastName: "",
 	phoneNumber: "",
 	position: "",
-	hp: "",
 	pScore: "",
 	rScore: "",
 	sScore: "",
-	grade: "",
+	tScore: "",
 };
 
 const App = () => {
@@ -33,47 +32,12 @@ const App = () => {
 	const [formState, setFormState] = useState(initialState);
 	const [datas, setDatas] = useState([]);
 
-	const [id, setId] = useState("init");
-
 	useEffect(() => {
 		fetchDatas();
 	}, []);
 
-	useEffect(() => {
-		if (id !== "init") {
-			console.log(formState);
-			const storageKey = formState.phoneNumber + ".jpg";
-
-			const qr = qrRef.current;
-
-			domtoimage.toJpeg(qr).then(async function (dataUrl) {
-				var arr = dataUrl.split(","),
-					mime = arr[0].match(/:(.*?);/)[1],
-					bstr = atob(arr[1]),
-					n = bstr.length,
-					u8arr = new Uint8Array(n);
-
-				while (n--) {
-					u8arr[n] = bstr.charCodeAt(n);
-				}
-
-				const result = await Storage.put(
-					storageKey,
-					new File([u8arr], storageKey, { type: mime }),
-					{
-						contentType: "image/jpeg",
-					},
-				);
-
-				console.log(result);
-			});
-		}
-	}, [id]);
-
 	function setInput(key, value) {
 		setFormState({ ...formState, [key]: value });
-
-		console.log({ ...formState, [key]: value });
 	}
 
 	async function fetchDatas() {
@@ -86,11 +50,34 @@ const App = () => {
 		// }
 	}
 
-	async function addData() {
+	async function submit() {
 		try {
-			if (!formState.name || !formState.height || !formState.phoneNumber)
+			if (
+				!formState.name ||
+				!formState.firstName ||
+				!formState.lastName ||
+				!formState.phoneNumber
+			)
 				return;
-			const data = { ...formState };
+
+			const uniqueID = uuid();
+			const shortID = uniqueID.slice(0, 4) + "-" + uniqueID.slice(4, 13);
+
+			let canvas = bwipjs.toCanvas("barcode", {
+				bcid: "code128", // Barcode type
+				text: shortID,
+				scale: 1, // 3x scaling factor
+				height: 15, // Bar height, in millimeters
+				includetext: true, // Show human-readable text
+				textxalign: "center", // Always good to set this
+				textsize: 15,
+				paddingheight: 10,
+				// rotate: "R",
+			});
+
+			const data = { ...formState, id: shortID };
+
+			console.log(formState);
 
 			setDatas([...datas, data]);
 
@@ -98,7 +85,27 @@ const App = () => {
 				graphqlOperation(createData, { input: data }),
 			);
 
-			setId(saveResult.data.createData.id);
+			const storageKey = formState.phoneNumber + ".jpg";
+			const qr = qrRef.current;
+			domtoimage.toJpeg(qr).then(async function (dataUrl) {
+				var arr = dataUrl.split(","),
+					mime = arr[0].match(/:(.*?);/)[1],
+					bstr = atob(arr[1]),
+					n = bstr.length,
+					u8arr = new Uint8Array(n);
+				while (n--) {
+					u8arr[n] = bstr.charCodeAt(n);
+				}
+				const result = await Storage.put(
+					storageKey,
+					new File([u8arr], storageKey, { type: mime }),
+					{
+						contentType: "image/jpeg",
+					},
+				);
+
+				console.log(result);
+			});
 		} catch (err) {
 			console.log("error creating data:", err);
 		}
@@ -111,88 +118,95 @@ const App = () => {
 				style={{
 					position: "fixed",
 					// top: "1000px",
-					width: "546px",
-					height: "962px",
-					backgroundImage: "url(img/frame.jpg)",
+					width: "250px",
+					height: "339px",
+					backgroundImage: "url(img/barcode_frame.jpg)",
+					backgroundSize: "cover",
 					zIndex: -15,
 				}}
 			>
-				<QRCode
-					value={id}
-					size={340}
+				<div
 					style={{
 						position: "absolute",
-						left: "100px",
-						top: "275px",
+						left: "30px",
+						top: "255px",
 					}}
-				/>
+				>
+					<canvas
+						id="barcode"
+						style={{
+							position: "absolute",
+							// width: "200px",
+						}}
+					></canvas>
+				</div>
 			</div>
-			{/* <Authenticator>
-				{({ signOut, user }) => ( */}
-			<div style={styles.container}>
-				<h2>Amplify Datas</h2>
+			<div>
+				<h2>Datas</h2>
 				<input
 					onChange={(event) => setInput("name", event.target.value)}
-					style={styles.input}
 					value={formState.name}
-					placeholder="Name"
+					placeholder="name"
 				/>
 				<input
-					onChange={(event) => setInput("height", event.target.value)}
-					style={styles.input}
-					value={formState.height}
-					placeholder="height"
+					onChange={(event) =>
+						setInput("firstName", event.target.value)
+					}
+					value={formState.firstName}
+					placeholder="firstName"
+				/>
+				<input
+					onChange={(event) =>
+						setInput("lastName", event.target.value)
+					}
+					value={formState.lastName}
+					placeholder="lastName"
 				/>
 				<input
 					onChange={(event) =>
 						setInput("phoneNumber", event.target.value)
 					}
-					style={styles.input}
 					value={formState.phoneNumber}
 					placeholder="phoneNumber"
 				/>
-				<button style={styles.button} onClick={addData}>
-					Create Data
-				</button>
+				<button onClick={submit}>제출</button>
 				{datas.map((data, index) => (
-					<div key={data.id ? data.id : index} style={styles.data}>
-						<p style={styles.dataName}>{data.name}</p>
-						<p style={styles.dataHeight}>{data.height}</p>
+					<div key={data.id ? data.id : index}>
+						<p>{data.name}</p>
+						<p>{data.height}</p>
 					</div>
 				))}
 			</div>
-			{/* )}
-			</Authenticator> */}
 		</>
 	);
-};
+};;
 
-const styles = {
-	container: {
-		width: 400,
-		margin: "0 auto",
-		display: "flex",
-		flexDirection: "column",
-		justifyContent: "center",
-		// padding: 20,
-	},
-	data: { marginBottom: 15 },
-	input: {
-		border: "none",
-		backgroundColor: "#ddd",
-		marginBottom: 10,
-		padding: 8,
-		fontSize: 18,
-	},
-	dataName: { fontSize: 20, fontWeight: "bold" },
-	dataScore1: { marginBottom: 0 },
-	button: {
-		backgroundColor: "black",
-		color: "white",
-		outline: "none",
-		fontSize: 18,
-		padding: "12px 0px",
-	},
-};
+// const styles = {
+// 	container: {
+// 		width: 400,
+// 		margin: "0 auto",
+// 		display: "flex",
+// 		flexDirection: "column",
+// 		justifyContent: "center",
+// 		// padding: 20,
+// 	},
+// 	data: { marginBottom: 15 },
+// 	input: {
+// 		border: "none",
+// 		backgroundColor: "#ddd",
+// 		marginBottom: 10,
+// 		padding: 8,
+// 		fontSize: 18,
+// 	},
+// 	dataName: { fontSize: 20, fontWeight: "bold" },
+// 	dataScore1: { marginBottom: 0 },
+// 	button: {
+// 		backgroundColor: "black",
+// 		color: "white",
+// 		outline: "none",
+// 		fontSize: 18,
+// 		padding: "12px 0px",
+// 	},
+// };
 
 export default App;

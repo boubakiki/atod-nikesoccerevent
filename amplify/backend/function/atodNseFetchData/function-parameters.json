@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "api": {
+      "atodnikesoccerevent": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

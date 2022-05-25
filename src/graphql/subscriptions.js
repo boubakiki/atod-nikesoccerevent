@@ -6,14 +6,14 @@ export const onCreateData = /* GraphQL */ `
     onCreateData {
       id
       name
-      height
+      firstName
+      lastName
       phoneNumber
       position
-      hp
       pScore
       rScore
       sScore
-      grade
+      tScore
       createdAt
       updatedAt
     }
@@ -24,14 +24,14 @@ export const onUpdateData = /* GraphQL */ `
     onUpdateData {
       id
       name
-      height
+      firstName
+      lastName
       phoneNumber
       position
-      hp
       pScore
       rScore
       sScore
-      grade
+      tScore
       createdAt
       updatedAt
     }
@@ -42,14 +42,14 @@ export const onDeleteData = /* GraphQL */ `
     onDeleteData {
       id
       name
-      height
+      firstName
+      lastName
       phoneNumber
       position
-      hp
       pScore
       rScore
       sScore
-      grade
+      tScore
       createdAt
       updatedAt
     }

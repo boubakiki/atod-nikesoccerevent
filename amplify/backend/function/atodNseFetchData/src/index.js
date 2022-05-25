@@ -11,23 +11,15 @@ const gql = require("graphql-tag");
 const graphql = require("graphql");
 const { print } = graphql;
 
-const updateData = gql`
-	mutation UpdateData(
-		$input: UpdateDataInput!
-		$condition: ModelDataConditionInput
-	) {
-		updateData(input: $input, condition: $condition) {
+const getData = gql`
+	query GetData($id: ID!) {
+		getData(id: $id) {
 			id
 			name
 			firstName
 			lastName
 			phoneNumber
 			position
-			pScore
-			rScore
-			sScore
-			tScore
-			updatedAt
 		}
 	}
 `;
@@ -39,10 +31,10 @@ exports.handler = async (event) => {
 	console.log(`EVENT: ${JSON.stringify(event)}`);
 
 	const inputData = JSON.parse(event.body);
-	console.log(inputData);
+	const id = inputData.id;
 
 	try {
-		const updateResult = await axios({
+		const getResult = await axios({
 			url: process.env.API_ATODNIKESOCCEREVENT_GRAPHQLAPIENDPOINTOUTPUT,
 			method: "post",
 			headers: {
@@ -50,14 +42,14 @@ exports.handler = async (event) => {
 					process.env.API_ATODNIKESOCCEREVENT_GRAPHQLAPIKEYOUTPUT,
 			},
 			data: {
-				query: print(updateData),
+				query: print(getData),
 				variables: {
-					input: inputData,
+					id: id,
 				},
 			},
 		});
 
-		console.log(updateResult.data.data.updateData);
+		// console.log(`Query Result: ${JSON.stringify(getResult.data)}`);
 
 		return {
 			statusCode: 200,
@@ -66,7 +58,7 @@ exports.handler = async (event) => {
 				"Access-Control-Allow-Headers": "*",
 			},
 			body: JSON.stringify({
-				updatedData: updateResult.data.data.updateData,
+				getData: getResult.data.data.getData,
 				message: "Success!",
 			}),
 		};
@@ -78,7 +70,10 @@ exports.handler = async (event) => {
 				"Access-Control-Allow-Origin": "*",
 				"Access-Control-Allow-Headers": "*",
 			},
-			body: JSON.stringify({ inputedData: inputData, message: "Fail!!" }),
+			body: JSON.stringify({
+				inputedId: inputData.id,
+				message: "Fail!!",
+			}),
 		};
 	}
 };
