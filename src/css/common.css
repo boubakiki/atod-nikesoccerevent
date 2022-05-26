@@ -166,7 +166,8 @@ input:focus {
 }
 
 .input_short {
-    width: 40.234375vw;
+    /* width: 40.234375vw; */
+    width: 412px;
 }
 .input_short:first-child {
     margin-right: 40px;
@@ -178,7 +179,8 @@ input:focus {
 }
 
 .label_text .first {
-    width: 40.234375vw;
+    /* width: 40.234375vw; */
+    width: 412px;
     display: inline-block;
     margin-right: 40px;
 }
@@ -290,14 +292,16 @@ input[type="checkbox"]:checked + label span.round {
     position:absolute;
     width:466px;
     height:125px;
+    margin:auto;
     top:977px;
-    left:279px;
+    margin-left: 279px;
     background: #fff;
     border-radius: 20px;
     font-family: 'SUIT';
     font-weight: 500;
     font-size: 36px;
     color: #28348A;
+    /* display:fixed; */
 }
 
 .btn_move_init {

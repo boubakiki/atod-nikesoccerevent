@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Storage, API, graphqlOperation } from "aws-amplify";
@@ -17,7 +17,7 @@ const initialState = {
 	firstName: "",
 	lastName: "",
 	phoneNumber: "",
-	position: "",
+	position: "Forward",
 	pScore: "",
 	rScore: "",
 	sScore: "",
@@ -49,20 +49,19 @@ const Register = () => {
 	const qrRef = useRef();
 	const navigate = useNavigate();
 
+	const nameInput = useRef(null);
+	const firstNameInput = useRef(null);
+	const lastNameInput = useRef(null);
 	const phoneNumberInput = useRef(null);
 
 	const [formState, setFormState] = useState(initialState);
 	const [datas, setDatas] = useState([]);
-	const [position, setPosition] = useState("Forward");
 	const [text, setText] = useState(initialText);
+	const [agree, setAgree] = useState(false);
 
 	function setInput(key, value) {
 		setFormState({ ...formState, [key]: value });
 	}
-
-	const handleChange = (event) => {
-		setPosition(event.target.value);
-	};
 
 	function moveInit() {
 		navigate("/");
@@ -70,6 +69,24 @@ const Register = () => {
 
 	async function submit() {
 		try {
+			if (!formState.name) {
+				alert("이름을 작성해야 합니다.");
+				nameInput.current.focus();
+				return;
+			}
+
+			if (!formState.lastName) {
+				alert("영문 성을 작성해야 합니다.");
+				lastNameInput.current.focus();
+				return;
+			}
+
+			if (!formState.firstName) {
+				alert("영문 이름을 작성해야 합니다.");
+				firstNameInput.current.focus();
+				return;
+			}
+
 			if (!formState.phoneNumber) {
 				alert("전화번호를 작성해야 합니다.");
 				phoneNumberInput.current.focus();
@@ -79,6 +96,11 @@ const Register = () => {
 			if (!regPhone.test(formState.phoneNumber)) {
 				alert("올바른 전화번호를 작성해야 합니다.");
 				phoneNumberInput.current.focus();
+				return;
+			}
+
+			if (!agree) {
+				alert("이용 약관에 동의해야 합니다.");
 				return;
 			}
 
@@ -99,13 +121,9 @@ const Register = () => {
 
 			const data = { ...formState, id: shortID };
 
-			console.log(formState);
-
 			setDatas([...datas, data]);
 
-			const saveResult = await API.graphql(
-				graphqlOperation(createData, { input: data }),
-			);
+			await API.graphql(graphqlOperation(createData, { input: data }));
 
 			const storageKey = formState.phoneNumber + ".jpg";
 			const qr = qrRef.current;
@@ -127,37 +145,28 @@ const Register = () => {
 				);
 
 				console.log(result);
+
+				navigate("/complete?n=" + formState.name);
 			});
 		} catch (err) {
+			alert("오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
 			console.log("error creating data:", err);
 		}
 	}
 
 	return (
 		<>
-			<div className="container">
-				<header>
-					<img
-						src="img/logo_text.png"
-						alt="Nike Football Studio"
-						className="header_text"
-					></img>
-					<img
-						src="img/logo.png"
-						alt="Nike Logo"
-						className="header_logo"
-					></img>
-				</header>
+			<div>
 				<div
 					ref={qrRef}
 					style={{
-						position: "fixed",
+						position: "absolute",
 						// top: "1000px",
 						width: "250px",
 						height: "339px",
 						backgroundImage: "url(img/barcode_frame.jpg)",
 						backgroundSize: "cover",
-						zIndex: -15,
+						zIndex: -10,
 					}}
 				>
 					<div
@@ -176,6 +185,20 @@ const Register = () => {
 						></canvas>
 					</div>
 				</div>
+			</div>
+			<div className="container">
+				<header>
+					<img
+						src="img/logo_text.png"
+						alt="Nike Football Studio"
+						className="header_text"
+					></img>
+					<img
+						src="img/logo.png"
+						alt="Nike Logo"
+						className="header_logo"
+					></img>
+				</header>
 				<div>
 					<div>
 						<p className="label_text">이름</p>
@@ -187,6 +210,7 @@ const Register = () => {
 							value={formState.name}
 							placeholder="이름을 입력해주세요."
 							className="input_text input_long"
+							ref={nameInput}
 						/>
 					</div>
 
@@ -204,6 +228,7 @@ const Register = () => {
 							placeholder="영문 성을 입력해주세요."
 							id="last_name"
 							className="input_text input_short"
+							ref={lastNameInput}
 						/>
 						<input
 							type="text"
@@ -214,6 +239,7 @@ const Register = () => {
 							placeholder="영문 이름을 입력해주세요."
 							id="first_name"
 							className="input_text input_short"
+							ref={firstNameInput}
 						/>
 					</div>
 					<div>
@@ -240,8 +266,10 @@ const Register = () => {
 									id="forward"
 									name="position"
 									value="Forward"
-									checked={position === "Forward"}
-									onChange={handleChange}
+									checked={formState.position === "Forward"}
+									onChange={(event) =>
+										setInput("position", event.target.value)
+									}
 								/>
 								<label htmlFor="forward">
 									<span className="round">라디오버튼</span>
@@ -254,8 +282,12 @@ const Register = () => {
 									id="midfielder"
 									name="position"
 									value="Midfielder"
-									checked={position === "Midfielder"}
-									onChange={handleChange}
+									checked={
+										formState.position === "Midfielder"
+									}
+									onChange={(event) =>
+										setInput("position", event.target.value)
+									}
 								/>
 								<label htmlFor="midfielder">
 									<span className="round">라디오버튼</span>
@@ -268,8 +300,10 @@ const Register = () => {
 									id="defender"
 									name="position"
 									value="Defender"
-									checked={position === "Defender"}
-									onChange={handleChange}
+									checked={formState.position === "Defender"}
+									onChange={(event) =>
+										setInput("position", event.target.value)
+									}
 								/>
 								<label htmlFor="defender">
 									<span className="round">라디오버튼</span>
@@ -282,8 +316,12 @@ const Register = () => {
 									id="goalkeeper"
 									name="position"
 									value="Goalkeeper"
-									checked={position === "Goalkeeper"}
-									onChange={handleChange}
+									checked={
+										formState.position === "Goalkeeper"
+									}
+									onChange={(event) =>
+										setInput("position", event.target.value)
+									}
 								/>
 								<label htmlFor="goalkeeper">
 									<span className="round">라디오버튼</span>
@@ -297,7 +335,15 @@ const Register = () => {
 						<textarea defaultValue={text}></textarea>
 					</div>
 					<div className="checkbox_box">
-						<input type="checkbox" id="agree" name="agree"></input>
+						<input
+							type="checkbox"
+							id="agree"
+							name="agree"
+							onChange={(event) => {
+								setAgree(event.target.checked);
+							}}
+							value={agree}
+						></input>
 						<label htmlFor="agree">
 							<span className="round">체크박스</span>이용 약관에
 							동의합니다.
