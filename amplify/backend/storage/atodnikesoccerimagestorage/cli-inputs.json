@@ -4,7 +4,9 @@
   "bucketName": "atodnikesoccerevent0720af9eea064f2da38e3251295a",
   "storageAccess": "authAndGuest",
   "guestAccess": [
-    "READ"
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
   ],
   "authAccess": [
     "CREATE_AND_UPDATE",

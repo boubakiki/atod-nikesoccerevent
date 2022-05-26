@@ -30,7 +30,7 @@
         },
         "atodNseSendMms": {
           "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
-          "s3Key": "amplify-builds/atodNseSendMms-426a2f734b55466f4f74-build.zip"
+          "s3Key": "amplify-builds/atodNseSendMms-33496445546f2b474471-build.zip"
         },
         "atodNseSaveResult": {
           "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",

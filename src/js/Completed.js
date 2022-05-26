@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import "../css/default.css";
@@ -6,6 +6,10 @@ import "../css/default.css";
 const Completed = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
+
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, []);
 
 	function moveInit() {
 		navigate("/");

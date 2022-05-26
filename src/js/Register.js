@@ -1,14 +1,15 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Storage, API, graphqlOperation } from "aws-amplify";
 import { createData } from "../graphql/mutations";
 
-import bwipjs from "bwip-js";
+// import bwipjs from "bwip-js";
 import { v4 as uuid } from "uuid";
 
 import "../css/default.css";
 
+import Barcode from "react-barcode";
 import domtoimage from "dom-to-image";
 
 const initialState = {
@@ -46,7 +47,7 @@ const initialText =
 	`6. 이 약관에서 정하지 아니한 내용과 이 약관의 해석에 관하여 전자상거래 등에서의 소비자보호에 관한 법률, 약관의 규제 등에 관한 법률, 공정거래위원회가 정하는 전자상거래 등에서의 소비자보호지침 및 관계법령 또는 상관례에 따릅니다.`;
 
 const Register = () => {
-	const qrRef = useRef();
+	const barcodeRef = useRef();
 	const navigate = useNavigate();
 
 	const nameInput = useRef(null);
@@ -55,79 +56,46 @@ const Register = () => {
 	const phoneNumberInput = useRef(null);
 
 	const [formState, setFormState] = useState(initialState);
-	const [datas, setDatas] = useState([]);
 	const [text, setText] = useState(initialText);
 	const [agree, setAgree] = useState(false);
+	const [key, setKey] = useState("init");
+	const [registText, setRegistText] = useState("선수 등록");
+	const [disabled, setDisabled] = useState(false);
 
-	function setInput(key, value) {
-		setFormState({ ...formState, [key]: value });
-	}
+	useEffect(() => {
+		window.scrollTo(0, 0);
+	}, []);
 
-	function moveInit() {
-		navigate("/");
-	}
+	useEffect(() => {
+		if (key !== "init") {
+			uploadBarcode(key);
+		}
+	}, [key]);
 
-	async function submit() {
+	async function uploadBarcode(key) {
+		const data = {
+			...formState,
+			id: key,
+			firstName: formState.firstName.toUpperCase(),
+			lastName: formState.lastName.toUpperCase(),
+		};
+
 		try {
-			if (!formState.name) {
-				alert("이름을 작성해야 합니다.");
-				nameInput.current.focus();
-				return;
-			}
-
-			if (!formState.lastName) {
-				alert("영문 성을 작성해야 합니다.");
-				lastNameInput.current.focus();
-				return;
-			}
-
-			if (!formState.firstName) {
-				alert("영문 이름을 작성해야 합니다.");
-				firstNameInput.current.focus();
-				return;
-			}
-
-			if (!formState.phoneNumber) {
-				alert("전화번호를 작성해야 합니다.");
-				phoneNumberInput.current.focus();
-				return;
-			}
-
-			if (!regPhone.test(formState.phoneNumber)) {
-				alert("올바른 전화번호를 작성해야 합니다.");
-				phoneNumberInput.current.focus();
-				return;
-			}
-
-			if (!agree) {
-				alert("이용 약관에 동의해야 합니다.");
-				return;
-			}
-
-			const uniqueID = uuid();
-			const shortID = uniqueID.slice(0, 4) + "-" + uniqueID.slice(4, 13);
-
-			let canvas = bwipjs.toCanvas("barcode", {
-				bcid: "code128", // Barcode type
-				text: shortID,
-				scale: 1, // 3x scaling factor
-				height: 15, // Bar height, in millimeters
-				includetext: true, // Show human-readable text
-				textxalign: "center", // Always good to set this
-				textsize: 15,
-				paddingheight: 10,
-				// rotate: "R",
-			});
-
-			const data = { ...formState, id: shortID };
-
-			setDatas([...datas, data]);
-
 			await API.graphql(graphqlOperation(createData, { input: data }));
+		} catch (error) {
+			alert("오류가 발생하였습니다. 다시 시도해주세요.");
+			console.log("error creating data:", error);
 
-			const storageKey = formState.phoneNumber + ".jpg";
-			const qr = qrRef.current;
-			domtoimage.toJpeg(qr).then(async function (dataUrl) {
+			setRegistText("선수 등록");
+			setDisabled(false);
+			return;
+		}
+
+		const storageKey = formState.phoneNumber + ".jpg";
+		const barcode = barcodeRef.current;
+		domtoimage
+			.toJpeg(barcode, { quality: 0.9949 })
+			.then(async function (dataUrl) {
 				var arr = dataUrl.split(","),
 					mime = arr[0].match(/:(.*?);/)[1],
 					bstr = atob(arr[1]),
@@ -145,45 +113,107 @@ const Register = () => {
 				);
 
 				console.log(result);
-
-				navigate("/complete?n=" + formState.name);
+				setRegistText("선수 등록");
+				setDisabled(false);
+				navigate("/complete?n=" + encodeURIComponent(formState.name));
 			});
-		} catch (err) {
-			alert("오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
-			console.log("error creating data:", err);
+	}
+
+	function setInput(key, value) {
+		setFormState({ ...formState, [key]: value });
+	}
+
+	function moveInit() {
+		navigate("/");
+	}
+
+	async function submit() {
+		if (!formState.name) {
+			alert("이름을 작성해야 합니다.");
+			nameInput.current.focus();
+			return;
 		}
+
+		if (!formState.lastName) {
+			alert("영문 성을 작성해야 합니다.");
+			lastNameInput.current.focus();
+			return;
+		}
+
+		if (!formState.firstName) {
+			alert("영문 이름을 작성해야 합니다.");
+			firstNameInput.current.focus();
+			return;
+		}
+
+		if (!formState.phoneNumber) {
+			alert("전화번호를 작성해야 합니다.");
+			phoneNumberInput.current.focus();
+			return;
+		}
+
+		if (!regPhone.test(formState.phoneNumber)) {
+			alert("올바른 전화번호를 작성해야 합니다.");
+			phoneNumberInput.current.focus();
+			return;
+		}
+
+		if (!agree) {
+			alert("이용 약관에 동의해야 합니다.");
+			return;
+		}
+
+		setRegistText("등록 중...");
+		setDisabled(true);
+
+		const uniqueID = uuid();
+		const shortID = uniqueID.slice(0, 13).replaceAll("-", "");
+
+		setKey(shortID);
+
+		// let canvas = bwipjs.toCanvas("barcode", {
+		// 	bcid: "code128", // Barcode type
+		// 	text: shortID,
+		// 	scale: 1, // 3x scaling factor
+		// 	height: 15, // Bar height, in millimeters
+		// 	includetext: true, // Show human-readable text
+		// 	textxalign: "center", // Always good to set this
+		// 	textsize: 15,
+		// 	paddingheight: 10,
+		// 	// rotate: "R",
+		// });
 	}
 
 	return (
 		<>
-			<div>
+			<div
+				ref={barcodeRef}
+				style={{
+					position: "absolute",
+					width: "380px",
+					height: "517px",
+					backgroundImage: "url(img/barcode_frame.png)",
+					backgroundSize: "cover",
+					display: "flex",
+					justifyContent: "center",
+					zIndex: -5,
+				}}
+			>
 				<div
-					ref={qrRef}
 					style={{
 						position: "absolute",
-						// top: "1000px",
-						width: "250px",
-						height: "339px",
-						backgroundImage: "url(img/barcode_frame.jpg)",
-						backgroundSize: "cover",
-						zIndex: -10,
+						top: "379px",
 					}}
 				>
-					<div
-						style={{
-							position: "absolute",
-							left: "30px",
-							top: "255px",
-						}}
-					>
-						<canvas
-							id="barcode"
-							style={{
-								position: "absolute",
-								// width: "200px",
-							}}
-						></canvas>
-					</div>
+					<Barcode
+						value={key}
+						format={`CODE128`}
+						width={2}
+						height={92}
+						font={`SUIT`}
+						fontSize={17}
+						fontOptions={`bold`}
+					/>
 				</div>
 			</div>
 			<div className="container">
@@ -350,8 +380,12 @@ const Register = () => {
 						</label>
 					</div>
 					<p>
-						<button className="btn_submit" onClick={submit}>
-							선수 등록
+						<button
+							className="btn_submit"
+							onClick={submit}
+							disabled={disabled}
+						>
+							{registText}
 						</button>
 					</p>
 					<div>
