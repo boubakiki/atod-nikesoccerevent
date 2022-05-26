@@ -24,6 +24,8 @@ const initialState = {
 	tScore: "",
 };
 
+const regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+
 const initialText =
 	`제1조 (목적)\n` +
 	`본 '[디지털 모두의 운동장 서비스 이용 약관]' (이하 "본 약관"이라 합니다)은 이용자가 (유)나이키코리아에서 제공하는 [디지털 모두의 운동장 사이트] 및 사이트 관련 각종 서비스 (이하 "서비스"라 합니다)를 이용함에 있어 "디지털 모두의 운동장 사이트”와 “이용자”의 권리 의무 및 책임 사항을 규정함을 목적으로 합니다.\n` +
@@ -47,27 +49,15 @@ const Register = () => {
 	const qrRef = useRef();
 	const navigate = useNavigate();
 
+	const phoneNumberInput = useRef(null);
+
 	const [formState, setFormState] = useState(initialState);
 	const [datas, setDatas] = useState([]);
 	const [position, setPosition] = useState("Forward");
 	const [text, setText] = useState(initialText);
 
-	useEffect(() => {
-		fetchDatas();
-	}, []);
-
 	function setInput(key, value) {
 		setFormState({ ...formState, [key]: value });
-	}
-
-	async function fetchDatas() {
-		// try {
-		// 	const data = await API.graphql(graphqlOperation(listDatas));
-		// 	const datas = data.data.listDatas.items;
-		// 	setDatas(datas);
-		// } catch (err) {
-		// 	console.log("error fetching datas:", err);
-		// }
 	}
 
 	const handleChange = (event) => {
@@ -80,13 +70,17 @@ const Register = () => {
 
 	async function submit() {
 		try {
-			if (
-				!formState.name ||
-				!formState.firstName ||
-				!formState.lastName ||
-				!formState.phoneNumber
-			)
+			if (!formState.phoneNumber) {
+				alert("전화번호를 작성해야 합니다.");
+				phoneNumberInput.current.focus();
 				return;
+			}
+
+			if (!regPhone.test(formState.phoneNumber)) {
+				alert("올바른 전화번호를 작성해야 합니다.");
+				phoneNumberInput.current.focus();
+				return;
+			}
 
 			const uniqueID = uuid();
 			const shortID = uniqueID.slice(0, 4) + "-" + uniqueID.slice(4, 13);
@@ -231,6 +225,8 @@ const Register = () => {
 							value={formState.phoneNumber}
 							placeholder="전화번호를 ‘-’없이 입력해주세요."
 							className="input_text input_long"
+							type="tel"
+							ref={phoneNumberInput}
 						/>
 					</div>
 					<div>

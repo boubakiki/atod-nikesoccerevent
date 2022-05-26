@@ -144,6 +144,8 @@ body {
     border: solid 2px #AAAAAA;
     border-radius: 20px;
     padding: 0 40px;
+    font-family: 'SUIT';
+    font-weight: 500;
     font-size: 28px;
     box-sizing: border-box;
     color:black;
