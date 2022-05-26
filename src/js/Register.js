@@ -1,0 +1,329 @@
+import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+
+import { Storage, API, graphqlOperation } from "aws-amplify";
+import { createData } from "../graphql/mutations";
+
+import bwipjs from "bwip-js";
+import { v4 as uuid } from "uuid";
+
+import "../css/default.css";
+
+import domtoimage from "dom-to-image";
+
+const initialState = {
+	id: "",
+	name: "",
+	firstName: "",
+	lastName: "",
+	phoneNumber: "",
+	position: "",
+	pScore: "",
+	rScore: "",
+	sScore: "",
+	tScore: "",
+};
+
+const initialText =
+	`제1조 (목적)\n` +
+	`본 '[디지털 모두의 운동장 서비스 이용 약관]' (이하 "본 약관"이라 합니다)은 이용자가 (유)나이키코리아에서 제공하는 [디지털 모두의 운동장 사이트] 및 사이트 관련 각종 서비스 (이하 "서비스"라 합니다)를 이용함에 있어 "디지털 모두의 운동장 사이트”와 “이용자”의 권리 의무 및 책임 사항을 규정함을 목적으로 합니다.\n` +
+	`제2조 (정의)\n` +
+	`본 약관의 주요 용어는 아래와 같이 정의합니다.\n` +
+	`• "NIKE"는 (유)나이키코리아를 말하며  디지털 모두의 운동장 사이트는 NIKE가 운영하는 공식 온라인 쇼핑몰을 통하여 제공되는 별도의 이벤트 사이트를 말합니다.\n` +
+	`• "서비스"란 디지털 모두의 운동장 사이트 및 사이트 관련 각종 서비스를 말합니다.\n` +
+	`• “이용자”란 "사이트"에 접속하여 이 약관에 따라 "디지털 모두의 운동장"이 제공하는 “서비스”를 받는 “회원”회원을 말합니다.\n` +
+	`• "회원"은 "나이키 디지털 플레이그라운드"에 개인 정보를 제공하여 회원 등록을 한 자로서, 회원 전용 "서비스"를 이용할 수 있는 자를 말합니다.\n` +
+	`2. 이 약관에서 정하지 아니한 내용과 이 약관의 해석에 관하여는 전자상거래 등에서의 소비자보호에 관한 법률, 약관의 규제 등에 관한 법률, 공정거래위원 회가 정하는 전자상거래 등에서의 소비자보호지침 및 관계법령 또는 상관례에 따릅니다\n` +
+	`\n` +
+	`제 3조 (약관의 게시와 변경)\n` +
+	`1. "디지털 모두의 운동장"은 이 약관의 내용과 상호, 영업소 소재지 주소(소비자의 불만을 처리할 수 있는 곳의 주소를 포함)전화번호, 모사전송번호, 이메일 주소, 사업자등록번호, 통신판매업신고번호, 개인정보보호책임자 등을 이용자가 쉽게 알 수 있도록 “디지털 모두의 운동장”의 초기 서비스화면(전면)에 게시합니다. 다만, 약관의 내용은 이용자가 연결화면을 통하여 볼 수 있도록 할 수 있습니다.\n` +
+	`2. "디지털 모두의 운동장"은 이용자가 약관에 동의하기에 앞서 약관에 정하여져 있는 내용 중 청약철회, 배송책임, 환불조건 등과 같은 중요한 내용을 이용 자가 이해할 수 있도록 별도의 연결화면 또는 팝업화면 등을 제공하여 이용자의 확인을 구하여야 합니다.\n` +
+	`3. "디지털 모두의 운동장"은 「전자상거래 등에서의 소비자보호에 관한 법률」, 「약관의 규제에 관한 법률」, 「전자문서 및 전자거래기본법」, 「전자금융거래법」, 「전자서명법」, 「정보통신망 이용촉진 및 정보보호 등에 관한 법률」, 「방문판매 등에 관한 법률」, 「소비자기본법」 등 관련 법을 위배하지 않는 범위에서 이 약관을 개정할 수 있습니다.\n` +
+	`4. "디지털 모두의 운동장"은 약관을 개정할 경우에는 적용일자 및 개정사유를 명시하여 현행약관과 함께 홈페이지의 초기화면에 그 적용일 7일 이전부터 적용일자 전일까지 공지합니다. 다만, 이용자에게 불리하게 약관내용을 변경하는 경우에는 최소한 30일 이상의 사전 유예기간을 두고 공지합니다. 이 경우 "디지털 모두의 운동장"은 개정 전 내용과 개정 후 내용을 명확하게 비교하여 이용자가 알기 쉽도록 표시합니다.\n` +
+	`5. "디지털 모두의 운동장"이 개정약관을 공지 또는 통지하면서 회원에게 30일 기간 내에 의사표시를 하지 않으면 의사표시가 표명된 것으로 본다는 뜻을 명확하게 따로 공지 또는 고지하였음에도 회원이 명시적으로 거부의사를 표시하지 아니한 경우 회원이 개정약관에 동의한 것으로 봅니다. 또한, 회원이 개정약관의 적용에 동의하지 않는 경우 "디지털 모두의 운동장"은 개정약관의 내용을 적용할 수 없으며, 이 경우, 회원은 이용계약을 해지할 수 있습니다. 다만, 기존약관을 적용할 수 없는 특별한 사정이 있는 경우에는 "디지털 모두의 운동장"은 이용계약을 해지할 수 있습니다.\n` +
+	`6. 이 약관에서 정하지 아니한 내용과 이 약관의 해석에 관하여 전자상거래 등에서의 소비자보호에 관한 법률, 약관의 규제 등에 관한 법률, 공정거래위원회가 정하는 전자상거래 등에서의 소비자보호지침 및 관계법령 또는 상관례에 따릅니다.`;
+
+const Register = () => {
+	const qrRef = useRef();
+	const navigate = useNavigate();
+
+	const [formState, setFormState] = useState(initialState);
+	const [datas, setDatas] = useState([]);
+	const [position, setPosition] = useState("Forward");
+	const [text, setText] = useState(initialText);
+
+	useEffect(() => {
+		fetchDatas();
+	}, []);
+
+	function setInput(key, value) {
+		setFormState({ ...formState, [key]: value });
+	}
+
+	async function fetchDatas() {
+		// try {
+		// 	const data = await API.graphql(graphqlOperation(listDatas));
+		// 	const datas = data.data.listDatas.items;
+		// 	setDatas(datas);
+		// } catch (err) {
+		// 	console.log("error fetching datas:", err);
+		// }
+	}
+
+	const handleChange = (event) => {
+		setPosition(event.target.value);
+	};
+
+	function moveInit() {
+		navigate("/");
+	}
+
+	async function submit() {
+		try {
+			if (
+				!formState.name ||
+				!formState.firstName ||
+				!formState.lastName ||
+				!formState.phoneNumber
+			)
+				return;
+
+			const uniqueID = uuid();
+			const shortID = uniqueID.slice(0, 4) + "-" + uniqueID.slice(4, 13);
+
+			let canvas = bwipjs.toCanvas("barcode", {
+				bcid: "code128", // Barcode type
+				text: shortID,
+				scale: 1, // 3x scaling factor
+				height: 15, // Bar height, in millimeters
+				includetext: true, // Show human-readable text
+				textxalign: "center", // Always good to set this
+				textsize: 15,
+				paddingheight: 10,
+				// rotate: "R",
+			});
+
+			const data = { ...formState, id: shortID };
+
+			console.log(formState);
+
+			setDatas([...datas, data]);
+
+			const saveResult = await API.graphql(
+				graphqlOperation(createData, { input: data }),
+			);
+
+			const storageKey = formState.phoneNumber + ".jpg";
+			const qr = qrRef.current;
+			domtoimage.toJpeg(qr).then(async function (dataUrl) {
+				var arr = dataUrl.split(","),
+					mime = arr[0].match(/:(.*?);/)[1],
+					bstr = atob(arr[1]),
+					n = bstr.length,
+					u8arr = new Uint8Array(n);
+				while (n--) {
+					u8arr[n] = bstr.charCodeAt(n);
+				}
+				const result = await Storage.put(
+					storageKey,
+					new File([u8arr], storageKey, { type: mime }),
+					{
+						contentType: "image/jpeg",
+					},
+				);
+
+				console.log(result);
+			});
+		} catch (err) {
+			console.log("error creating data:", err);
+		}
+	}
+
+	return (
+		<>
+			<div className="container">
+				<header>
+					<img
+						src="img/logo_text.png"
+						alt="Nike Football Studio"
+						className="header_text"
+					></img>
+					<img
+						src="img/logo.png"
+						alt="Nike Logo"
+						className="header_logo"
+					></img>
+				</header>
+				<div
+					ref={qrRef}
+					style={{
+						position: "fixed",
+						// top: "1000px",
+						width: "250px",
+						height: "339px",
+						backgroundImage: "url(img/barcode_frame.jpg)",
+						backgroundSize: "cover",
+						zIndex: -15,
+					}}
+				>
+					<div
+						style={{
+							position: "absolute",
+							left: "30px",
+							top: "255px",
+						}}
+					>
+						<canvas
+							id="barcode"
+							style={{
+								position: "absolute",
+								// width: "200px",
+							}}
+						></canvas>
+					</div>
+				</div>
+				<div>
+					<div>
+						<p className="label_text">이름</p>
+						<input
+							type="text"
+							onChange={(event) =>
+								setInput("name", event.target.value)
+							}
+							value={formState.name}
+							placeholder="이름을 입력해주세요."
+							className="input_text input_long"
+						/>
+					</div>
+
+					<p className="label_text">
+						<span className="first">영문 성</span>
+						<span className="second">영문 이름</span>
+					</p>
+					<div>
+						<input
+							type="text"
+							onChange={(event) =>
+								setInput("lastName", event.target.value)
+							}
+							value={formState.lastName}
+							placeholder="영문 성을 입력해주세요."
+							id="last_name"
+							className="input_text input_short"
+						/>
+						<input
+							type="text"
+							onChange={(event) =>
+								setInput("firstName", event.target.value)
+							}
+							value={formState.firstName}
+							placeholder="영문 이름을 입력해주세요."
+							id="first_name"
+							className="input_text input_short"
+						/>
+					</div>
+					<div>
+						<p className="label_text">전화번호</p>
+						<input
+							onChange={(event) =>
+								setInput("phoneNumber", event.target.value)
+							}
+							value={formState.phoneNumber}
+							placeholder="전화번호를 ‘-’없이 입력해주세요."
+							className="input_text input_long"
+						/>
+					</div>
+					<div>
+						<p className="label_text">
+							좋아하는 포지션을 선택해주세요.
+						</p>
+						<div className="radio_content">
+							<span className="radio_box">
+								<input
+									type="radio"
+									id="forward"
+									name="position"
+									value="Forward"
+									checked={position === "Forward"}
+									onChange={handleChange}
+								/>
+								<label htmlFor="forward">
+									<span className="round">라디오버튼</span>
+									포워드 (Forward)
+								</label>
+							</span>
+							<span className="radio_box">
+								<input
+									type="radio"
+									id="midfielder"
+									name="position"
+									value="Midfielder"
+									checked={position === "Midfielder"}
+									onChange={handleChange}
+								/>
+								<label htmlFor="midfielder">
+									<span className="round">라디오버튼</span>
+									미드필더 (Midfielder)
+								</label>
+							</span>
+							<span className="radio_box">
+								<input
+									type="radio"
+									id="defender"
+									name="position"
+									value="Defender"
+									checked={position === "Defender"}
+									onChange={handleChange}
+								/>
+								<label htmlFor="defender">
+									<span className="round">라디오버튼</span>
+									수비수 (Defender)
+								</label>
+							</span>
+							<span className="radio_box">
+								<input
+									type="radio"
+									id="goalkeeper"
+									name="position"
+									value="Goalkeeper"
+									checked={position === "Goalkeeper"}
+									onChange={handleChange}
+								/>
+								<label htmlFor="goalkeeper">
+									<span className="round">라디오버튼</span>
+									골키퍼 (Goalkeeper)
+								</label>
+							</span>
+						</div>
+					</div>
+					<div>
+						<p className="label_text">이용약관</p>
+						<textarea defaultValue={text}></textarea>
+					</div>
+					<div className="checkbox_box">
+						<input type="checkbox" id="agree" name="agree"></input>
+						<label htmlFor="agree">
+							<span className="round">체크박스</span>이용 약관에
+							동의합니다.
+						</label>
+					</div>
+					<p>
+						<button className="btn_submit" onClick={submit}>
+							선수 등록
+						</button>
+					</p>
+					<div>
+						<img
+							src="img/btn_back.png"
+							alt="Back Page"
+							className="btn_back"
+							onClick={moveInit}
+						></img>
+					</div>
+				</div>
+			</div>
+		</>
+	);
+};
+
+export default Register;

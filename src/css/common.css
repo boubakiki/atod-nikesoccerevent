@@ -1,0 +1,335 @@
+@charset "utf-8";
+
+@font-face {
+	font-family: 'SUIT';
+	font-weight: 100;
+	src: url(../fonts/SUIT-Thin.woff) format('woff'), 
+        url(../fonts/SUIT-Thin.woff2) format('woff2'),
+        url(../fonts/SUIT-Thin.ttf) format('truetype');
+}
+@font-face {
+	font-family: 'SUIT';
+	font-weight: 200;
+    src: url(../fonts/SUIT-ExtraLight.woff) format('woff'), 
+        url(../fonts/SUIT-ExtraLight.woff2) format('woff2'),
+        url(../fonts/SUIT-ExtraLight.ttf) format('truetype');
+}
+@font-face {
+	font-family: 'SUIT';
+	font-weight: 300;
+    src: url(../fonts/SUIT-Light.woff) format('woff'), 
+        url(../fonts/SUIT-Light.woff2) format('woff2'),
+        url(../fonts/SUIT-Light.ttf) format('truetype');
+}
+@font-face {
+	font-family: 'SUIT';
+	font-weight: 400;
+    src: url(../fonts/SUIT-Regular.woff) format('woff'), 
+        url(../fonts/SUIT-Regular.woff2) format('woff2'),
+        url(../fonts/SUIT-Regular.ttf) format('truetype');
+}
+@font-face {
+	font-family: 'SUIT';
+	font-weight: 500;
+    src: url(../fonts/SUIT-Medium.woff) format('woff'), 
+        url(../fonts/SUIT-Medium.woff2) format('woff2'),
+        url(../fonts/SUIT-Medium.ttf) format('truetype');
+}
+@font-face {
+	font-family: 'SUIT';
+	font-weight: 600;
+    src: url(../fonts/SUIT-SemiBold.woff) format('woff'), 
+        url(../fonts/SUIT-SemiBold.woff2) format('woff2'),
+        url(../fonts/SUIT-SemiBold.ttf) format('truetype');
+}
+@font-face {
+	font-family: 'SUIT';
+	font-weight: 700;
+    src: url(../fonts/SUIT-Bold.woff) format('woff'), 
+        url(../fonts/SUIT-Bold.woff2) format('woff2'),
+        url(../fonts/SUIT-Bold.ttf) format('truetype');
+}
+@font-face {
+	font-family: 'SUIT';
+	font-weight: 800;
+    src: url(../fonts/SUIT-ExtraBold.woff) format('woff'), 
+        url(../fonts/SUIT-ExtraBold.woff2) format('woff2'),
+        url(../fonts/SUIT-ExtraBold.ttf) format('truetype');
+}
+@font-face {
+	font-family: 'SUIT';
+	font-weight: 900;
+    src: url(../fonts/SUIT-Heavy.woff) format('woff'), 
+        url(../fonts/SUIT-Heavy.woff2) format('woff2'),
+        url(../fonts/SUIT-Heavy.ttf) format('truetype'); 
+}
+
+
+/* ---------------------- LAYOUT ------------------------- */
+body {
+    max-width: 1024px;
+    width:100%;
+    margin:0 auto;
+    font-family: 'SUIT', sans-serif;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: auto;
+    background: #fff;
+    background-color: #fff;
+}
+
+.init {
+    width: 100%;
+    height:1366px;
+    background: url(../img/init.png) no-repeat;
+    background-size: cover;
+}
+
+.main_text {
+    font-family: 'SUIT';
+    font-weight: 500;
+    font-size: 70px;
+}
+
+.main_text:first-child {
+    margin-bottom: 10px;
+    padding-top: 416px;
+    box-sizing: border-box;
+}
+
+.main_text:nth-child(2) {
+    margin-bottom: 40px;
+    box-sizing: border-box;
+}
+
+.sub_text {
+    font-family: 'SUIT';
+    font-weight: 500;
+    font-size: 40px;
+    margin-bottom: 130px;
+}
+
+.completed {
+    width: 100%;
+    height:1366px;
+    background: url(../img/completed.png) no-repeat;
+    background-size: cover;
+}
+
+.container {
+    width:100%;
+    padding:100px 80px 0 80px;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+
+.container header {
+    margin-bottom: 95px;
+}
+
+.header_text {
+    width: 410px;
+    height: 342px;
+    margin-right: 292px;
+}
+
+.header_logo {
+    width: 202px;
+    height: 71px;
+    position:absolute;
+}
+
+.input_text {
+    height: 115px;
+    border: solid 2px #AAAAAA;
+    border-radius: 20px;
+    padding: 0 40px;
+    font-size: 28px;
+    box-sizing: border-box;
+    color:black;
+    line-height: auto;
+    margin-bottom: 50px;
+}
+
+input::placeholder {
+    color:black
+}
+
+input:focus {
+    outline-color: black;
+}
+
+.input_long {
+    width: 100%;
+}
+
+.input_short {
+    width: 40.234375vw;
+}
+.input_short:first-child {
+    margin-right: 40px;
+}
+
+.label_text {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.label_text .first {
+    width: 40.234375vw;
+    display: inline-block;
+    margin-right: 40px;
+}
+
+
+label {
+    display: inline-block;
+}
+
+.radio_content .radio_box:first-child,  .radio_box:nth-child(3){
+    margin-right:40px;
+}
+
+.radio_content .radio_box:first-child,  .radio_box:nth-child(2){
+    margin-bottom:20px;
+}
+
+.radio_content .radio_box:nth-child(3),  .radio_box:nth-child(4){
+    margin-bottom:50px;
+}
+
+.radio_box {
+    display: inline-block;
+    width: 412px;
+}
+
+input[type="radio"] {
+    display:none;
+}
+
+input[type="radio"] + label {
+    font-size: 28px;
+}
+
+input[type="radio"] + label span.round {
+    display:inline-block;
+    width: 80px;
+    height: 80px;
+    margin-right: 20px;
+    font-size: 0;
+    vertical-align: middle;
+    background: url(../img/radio_unchecked.png) no-repeat;cursor:pointer;
+    background-size: cover;
+}
+
+input[type="radio"]:checked + label span.round {
+    background: url(../img/radio_checked.png) no-repeat;
+    background-size: cover;
+} 
+  
+textarea {
+    font-family: 'SUIT';
+    font-weight: 500;
+    font-size: 28px;
+    width:864px;
+    height:250px;
+    box-sizing: border-box;
+    padding: 40px;
+    border-radius: 20px;
+    line-height: auto;
+    resize: none;
+    overflow:auto;
+    margin-bottom: 20px;
+    border: solid 1px #AAAAAA;
+}
+
+.checkbox_box {
+    margin-bottom: 89px;
+}
+
+input[type="checkbox"] {
+    display:none;
+}
+
+input[type="checkbox"] + label {
+    font-size: 28px;
+}
+
+input[type="checkbox"] + label span.round {
+    display:inline-block;
+    width: 80px;
+    height: 80px;
+    margin-right: 20px;
+    font-size: 0;
+    vertical-align: middle;
+    background: url(../img/checkbox_unchecked.png) no-repeat;cursor:pointer;
+    background-size: cover;
+}
+
+input[type="checkbox"]:checked + label span.round {
+    background: url(../img/checkbox_checked.png) no-repeat;
+    background-size: cover;
+} 
+
+/* ---------------------- BUTTON & LINK ------------------------- */
+.btn_submit {
+    width: 100%;
+    height: 130px;
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 40px;
+    background: #E30613;
+    color: #fff;
+    stroke-width: 0;
+    border-radius: 20px;
+}
+
+.btn_move_register {
+    position:absolute;
+    width:466px;
+    height:125px;
+    top:977px;
+    left:279px;
+    background: #fff;
+    border-radius: 20px;
+    font-family: 'SUIT';
+    font-weight: 500;
+    font-size: 36px;
+    color: #28348A;
+}
+
+.btn_move_init {
+    position:absolute;
+    width:500px;
+    height:130px;
+    margin-left: 262px;
+    margin-right: 262px;
+    background: #E30613;
+    border-radius: 20px;
+    font-family: 'SUIT';
+    font-weight: 500;
+    font-size: 40px;
+    color: #fff;
+}
+
+.btn_back {
+    width: 241px;
+    height: 35px;
+    padding-left: 311px;
+    padding-right: 312px;
+    margin-bottom: 135px;
+    cursor:pointer;
+}
+
+/* ---------------------- TEXT ALIGN ------------------------- */
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
