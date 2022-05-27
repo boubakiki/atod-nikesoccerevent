@@ -17,6 +17,7 @@ import {
 const initialState = [
 	{
 		id: "",
+		order: 0,
 		name: "",
 		firstName: "",
 		lastName: "",
@@ -29,6 +30,9 @@ const initialState = [
 		updatedAt: "",
 	},
 ];
+
+// TODO order 추가해야 함
+// TODO "카드 수령" 추가해야 함 => 체크박스 같은 걸로 줬는지 저장해야 함
 
 const headers = [
 	{ label: "바코드", key: "id" },
@@ -111,14 +115,14 @@ const Admin = (props) => {
 	}
 
 	async function updateData(data) {
-		const todoDetails = {
-			id: "some_id",
-			description: "My updated description!",
-		};
-		const updatedTodo = await API.graphql({
-			query: updateData,
-			variables: { input: todoDetails },
-		});
+		// const todoDetails = {
+		// 	id: "some_id",
+		// 	description: "My updated description!",
+		// };
+		// const updatedTodo = await API.graphql({
+		// 	query: updateData,
+		// 	variables: { input: todoDetails },
+		// });
 	}
 
 	return (

@@ -9,6 +9,7 @@ const Completed = () => {
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
+		setTimeout(moveInit, 5000);
 	}, []);
 
 	function moveInit() {

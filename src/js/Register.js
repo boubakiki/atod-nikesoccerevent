@@ -49,6 +49,8 @@ const initialText =
 	`5. "디지털 모두의 운동장"이 개정약관을 공지 또는 통지하면서 회원에게 30일 기간 내에 의사표시를 하지 않으면 의사표시가 표명된 것으로 본다는 뜻을 명확하게 따로 공지 또는 고지하였음에도 회원이 명시적으로 거부의사를 표시하지 아니한 경우 회원이 개정약관에 동의한 것으로 봅니다. 또한, 회원이 개정약관의 적용에 동의하지 않는 경우 "디지털 모두의 운동장"은 개정약관의 내용을 적용할 수 없으며, 이 경우, 회원은 이용계약을 해지할 수 있습니다. 다만, 기존약관을 적용할 수 없는 특별한 사정이 있는 경우에는 "디지털 모두의 운동장"은 이용계약을 해지할 수 있습니다.\n` +
 	`6. 이 약관에서 정하지 아니한 내용과 이 약관의 해석에 관하여 전자상거래 등에서의 소비자보호에 관한 법률, 약관의 규제 등에 관한 법률, 공정거래위원회가 정하는 전자상거래 등에서의 소비자보호지침 및 관계법령 또는 상관례에 따릅니다.`;
 
+const totalID = "c47e4865-cc7b-4db0-a5d0-5b02fb21b90c";
+
 const Register = () => {
 	const barcodeRef = useRef();
 	const navigate = useNavigate();
@@ -76,27 +78,33 @@ const Register = () => {
 	}, [key]);
 
 	async function uploadBarcode(key) {
-		// const totalNumResult = await API.graphql(
-		// 	graphqlOperation(getTotal, {
-		// 		variable: { id: "c47e4865-cc7b-4db0-a5d0-5b02fb21b90c" },
-		// 	}),
-		// );
-
-		// const totalNum = totalNumResult.data.getTotal.num;
-		const data = {
-			...formState,
-			id: key,
-			order: 1,
-			firstName: formState.firstName.toUpperCase(),
-			lastName: formState.lastName.toUpperCase(),
-		};
-
-		// console.log(data);
-
 		try {
-			// TODO totalNum 증가
+			const totalNumResult = await API.graphql({
+				query: getTotal,
+				variables: { id: totalID },
+			});
+
+			const nextNum = totalNumResult.data.getTotal.num + 1;
+
+			const data = {
+				...formState,
+				id: key,
+				order: nextNum,
+				firstName: formState.firstName.toUpperCase(),
+				lastName: formState.lastName.toUpperCase(),
+			};
 
 			await API.graphql(graphqlOperation(createData, { input: data }));
+
+			await API.graphql({
+				query: updateTotal,
+				variables: {
+					input: {
+						id: totalID,
+						num: nextNum,
+					},
+				},
+			});
 		} catch (error) {
 			alert("오류가 발생하였습니다. 다시 시도해주세요.");
 			console.log("error creating data:", error);
@@ -109,7 +117,7 @@ const Register = () => {
 		const storageKey = formState.phoneNumber + ".jpg";
 		const barcode = barcodeRef.current;
 		domtoimage
-			.toJpeg(barcode, { quality: 0.9949 })
+			.toJpeg(barcode, { quality: 0.95 })
 			.then(async function (dataUrl) {
 				var arr = dataUrl.split(","),
 					mime = arr[0].match(/:(.*?);/)[1],
