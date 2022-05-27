@@ -15,6 +15,7 @@ const getData = gql`
 	query GetData($id: ID!) {
 		getData(id: $id) {
 			id
+			order
 			name
 			firstName
 			lastName
@@ -30,7 +31,7 @@ const getData = gql`
 exports.handler = async (event) => {
 	console.log(`EVENT: ${JSON.stringify(event)}`);
 
-	const inputData = JSON.parse(event.body);
+	const inputData = JSON.parse(decodeURIComponent(event.body));
 	const id = inputData.id;
 
 	try {

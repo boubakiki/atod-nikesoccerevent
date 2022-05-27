@@ -38,7 +38,7 @@ const updateData = gql`
 exports.handler = async (event) => {
 	console.log(`EVENT: ${JSON.stringify(event)}`);
 
-	const inputData = JSON.parse(event.body);
+	const inputData = JSON.parse(decodeURIComponent(event.body));
 	console.log(inputData);
 
 	try {

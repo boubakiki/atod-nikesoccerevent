@@ -6,6 +6,7 @@ export const onCreateData = /* GraphQL */ `
     onCreateData {
       id
       type
+      order
       name
       firstName
       lastName
@@ -25,6 +26,7 @@ export const onUpdateData = /* GraphQL */ `
     onUpdateData {
       id
       type
+      order
       name
       firstName
       lastName
@@ -44,6 +46,7 @@ export const onDeleteData = /* GraphQL */ `
     onDeleteData {
       id
       type
+      order
       name
       firstName
       lastName
@@ -53,6 +56,36 @@ export const onDeleteData = /* GraphQL */ `
       rScore
       sScore
       tScore
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateTotal = /* GraphQL */ `
+  subscription OnCreateTotal {
+    onCreateTotal {
+      id
+      num
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateTotal = /* GraphQL */ `
+  subscription OnUpdateTotal {
+    onUpdateTotal {
+      id
+      num
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteTotal = /* GraphQL */ `
+  subscription OnDeleteTotal {
+    onDeleteTotal {
+      id
+      num
       createdAt
       updatedAt
     }

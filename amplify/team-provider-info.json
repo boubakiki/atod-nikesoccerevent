@@ -30,15 +30,15 @@
         },
         "atodNseSendMms": {
           "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
-          "s3Key": "amplify-builds/atodNseSendMms-56335365586d6839776d-build.zip"
+          "s3Key": "amplify-builds/atodNseSendMms-2b70694d575870515439-build.zip"
         },
         "atodNseSaveResult": {
           "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
-          "s3Key": "amplify-builds/atodNseSaveResult-78412b426573766a5a79-build.zip"
+          "s3Key": "amplify-builds/atodNseSaveResult-5a5233512f7565594846-build.zip"
         },
         "atodNseFetchData": {
           "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
-          "s3Key": "amplify-builds/atodNseFetchData-4463665557726b53417a-build.zip"
+          "s3Key": "amplify-builds/atodNseFetchData-744c5631507749765644-build.zip"
         }
       }
     }

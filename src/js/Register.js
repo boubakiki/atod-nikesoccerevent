@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Storage, API, graphqlOperation } from "aws-amplify";
-import { createData } from "../graphql/mutations";
+import { createData, updateTotal } from "../graphql/mutations";
+import { getTotal } from "../graphql/queries";
 
 // import bwipjs from "bwip-js";
 import { v4 as uuid } from "uuid";
@@ -15,6 +16,7 @@ import domtoimage from "dom-to-image";
 const initialState = {
 	id: "",
 	type: "Data",
+	order: 0,
 	name: "",
 	firstName: "",
 	lastName: "",
@@ -74,14 +76,25 @@ const Register = () => {
 	}, [key]);
 
 	async function uploadBarcode(key) {
-		const data = {
-			...formState,
-			id: key,
-			firstName: formState.firstName.toUpperCase(),
-			lastName: formState.lastName.toUpperCase(),
-		};
-
 		try {
+			const totalNumResult = await API.graphql(
+				graphqlOperation(getTotal, {
+					variable: { id: "c47e4865-cc7b-4db0-a5d0-5b02fb21b90c" },
+				}),
+			);
+
+			const totalNum = totalNumResult.data.getTotal.num;
+
+			const data = {
+				...formState,
+				id: key,
+				order: totalNum,
+				firstName: formState.firstName.toUpperCase(),
+				lastName: formState.lastName.toUpperCase(),
+			};
+
+			// TODO totalNum 증가
+
 			await API.graphql(graphqlOperation(createData, { input: data }));
 		} catch (error) {
 			alert("오류가 발생하였습니다. 다시 시도해주세요.");

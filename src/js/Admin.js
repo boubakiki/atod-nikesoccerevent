@@ -48,8 +48,6 @@ const Admin = (props) => {
 	const [csvDatas, setCsvDatas] = useState([]);
 
 	// TODO: 구해야 함
-	const [todayN, setTodayN] = useState(0);
-	const [totalN, setTotalN] = useState(0);
 	const [isDownloadLoading, setIsDownloadLoading] = useState(true);
 
 	useEffect(() => {
@@ -130,8 +128,6 @@ const Admin = (props) => {
 				<div>
 					<h1>Nike Football Studio Admin</h1>
 
-					<h2 className="today_n">오늘 방문자 수: {todayN}</h2>
-					<h2 className="total_n">전체 방문자 수: {totalN}</h2>
 					<div className="csv_link">
 						<CSVLink
 							data={csvDatas}

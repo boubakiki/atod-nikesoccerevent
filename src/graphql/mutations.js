@@ -9,6 +9,7 @@ export const createData = /* GraphQL */ `
     createData(input: $input, condition: $condition) {
       id
       type
+      order
       name
       firstName
       lastName
@@ -31,6 +32,7 @@ export const updateData = /* GraphQL */ `
     updateData(input: $input, condition: $condition) {
       id
       type
+      order
       name
       firstName
       lastName
@@ -53,6 +55,7 @@ export const deleteData = /* GraphQL */ `
     deleteData(input: $input, condition: $condition) {
       id
       type
+      order
       name
       firstName
       lastName
@@ -62,6 +65,45 @@ export const deleteData = /* GraphQL */ `
       rScore
       sScore
       tScore
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createTotal = /* GraphQL */ `
+  mutation CreateTotal(
+    $input: CreateTotalInput!
+    $condition: ModelTotalConditionInput
+  ) {
+    createTotal(input: $input, condition: $condition) {
+      id
+      num
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateTotal = /* GraphQL */ `
+  mutation UpdateTotal(
+    $input: UpdateTotalInput!
+    $condition: ModelTotalConditionInput
+  ) {
+    updateTotal(input: $input, condition: $condition) {
+      id
+      num
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteTotal = /* GraphQL */ `
+  mutation DeleteTotal(
+    $input: DeleteTotalInput!
+    $condition: ModelTotalConditionInput
+  ) {
+    deleteTotal(input: $input, condition: $condition) {
+      id
+      num
       createdAt
       updatedAt
     }

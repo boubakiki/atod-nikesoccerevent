@@ -80,7 +80,7 @@ exports.handler = (event) => {
 					data: {
 						message: {
 							to: phoneNumber,
-							from: "01068505282",
+							from: "025757131",
 							// subject: "나이키풋볼이벤트테스트",
 							text: "NIKE FOOTBALL STUDIO",
 							type: "MMS",
