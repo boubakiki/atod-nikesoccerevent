@@ -76,23 +76,24 @@ const Register = () => {
 	}, [key]);
 
 	async function uploadBarcode(key) {
+		// const totalNumResult = await API.graphql(
+		// 	graphqlOperation(getTotal, {
+		// 		variable: { id: "c47e4865-cc7b-4db0-a5d0-5b02fb21b90c" },
+		// 	}),
+		// );
+
+		// const totalNum = totalNumResult.data.getTotal.num;
+		const data = {
+			...formState,
+			id: key,
+			order: 1,
+			firstName: formState.firstName.toUpperCase(),
+			lastName: formState.lastName.toUpperCase(),
+		};
+
+		// console.log(data);
+
 		try {
-			const totalNumResult = await API.graphql(
-				graphqlOperation(getTotal, {
-					variable: { id: "c47e4865-cc7b-4db0-a5d0-5b02fb21b90c" },
-				}),
-			);
-
-			const totalNum = totalNumResult.data.getTotal.num;
-
-			const data = {
-				...formState,
-				id: key,
-				order: totalNum,
-				firstName: formState.firstName.toUpperCase(),
-				lastName: formState.lastName.toUpperCase(),
-			};
-
 			// TODO totalNum 증가
 
 			await API.graphql(graphqlOperation(createData, { input: data }));
