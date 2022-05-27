@@ -1,5 +1,12 @@
-type Data @model {
+type Data
+	@model
+	@key(
+		name: "datasByDate"
+		fields: ["type", "createdAt"]
+		queryField: "datasByDate"
+	) {
 	id: ID!
+	type: String!
 	name: String!
 	firstName: String!
 	lastName: String!
@@ -9,4 +16,5 @@ type Data @model {
 	rScore: String
 	sScore: String
 	tScore: String
+	createdAt: String!
 }

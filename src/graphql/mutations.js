@@ -8,6 +8,7 @@ export const createData = /* GraphQL */ `
   ) {
     createData(input: $input, condition: $condition) {
       id
+      type
       name
       firstName
       lastName
@@ -29,6 +30,7 @@ export const updateData = /* GraphQL */ `
   ) {
     updateData(input: $input, condition: $condition) {
       id
+      type
       name
       firstName
       lastName
@@ -50,6 +52,7 @@ export const deleteData = /* GraphQL */ `
   ) {
     deleteData(input: $input, condition: $condition) {
       id
+      type
       name
       firstName
       lastName

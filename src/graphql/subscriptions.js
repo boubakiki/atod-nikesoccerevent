@@ -5,6 +5,7 @@ export const onCreateData = /* GraphQL */ `
   subscription OnCreateData {
     onCreateData {
       id
+      type
       name
       firstName
       lastName
@@ -23,6 +24,7 @@ export const onUpdateData = /* GraphQL */ `
   subscription OnUpdateData {
     onUpdateData {
       id
+      type
       name
       firstName
       lastName
@@ -41,6 +43,7 @@ export const onDeleteData = /* GraphQL */ `
   subscription OnDeleteData {
     onDeleteData {
       id
+      type
       name
       firstName
       lastName

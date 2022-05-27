@@ -285,6 +285,92 @@ input[type="checkbox"]:checked + label span.round {
     cursor:pointer;
 }
 
+.csv_link {
+    font-family: 'SUIT';
+    font-weight: 500;
+    font-size: 70px;
+    position: absolute;
+    top:0;
+    right:6vw;
+}
+
+.csv_link button {
+    width:12vw;
+    height: 50px;
+    background: #168;
+    border-radius: 20px;
+    font-family: 'SUIT';
+    font-weight: 500;
+    font-size: 1vw;
+    color: #fff;
+}
+
+h1 {
+    font-family: 'SUIT';
+    font-weight: 500;
+    font-size: 2.8vw;
+    position: absolute;
+    top:0;
+    left:6vw;
+}
+
+h2 {
+    font-family: 'SUIT';
+    font-weight: 500;
+    font-size: 1.6vw;
+    position: absolute;
+    top:30px;
+}
+
+.today_n {
+    position: absolute;
+    left:43vw;
+}
+
+.total_n {
+    position: absolute;
+    left:55vw;
+}
+
+table {
+    border-collapse: collapse;
+    border-top: 3px solid #168;
+    width: 88vw;
+    position: absolute;
+    top:90px;
+    left:6vw;
+} 
+table th {
+    color: #168;
+    background: #f0f6f9;
+}
+table td {
+    width: 8vw;
+}
+table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+table th:first-child, table td:first-child {
+    border-left: 0;
+}
+table th:last-child, table td:last-child {
+    border-right: 0;
+}
+td input {
+    /* height: 60px; */
+    width: 7.8vw;
+    padding-left: 10px;
+    border: solid 2px #AAAAAA;
+    border-radius: 20px;
+    font-family: 'SUIT';
+    font-weight: 500;
+    font-size: 28px;
+    box-sizing: border-box;
+    color:black;
+}
+
+
 /* ---------------------- TEXT ALIGN ------------------------- */
 .text-left {
     text-align: left;

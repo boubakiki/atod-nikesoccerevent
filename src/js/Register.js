@@ -14,6 +14,7 @@ import domtoimage from "dom-to-image";
 
 const initialState = {
 	id: "",
+	type: "Data",
 	name: "",
 	firstName: "",
 	lastName: "",
