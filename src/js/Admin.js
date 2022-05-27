@@ -2,8 +2,9 @@ import { CSVLink } from "react-csv";
 
 import { API, graphqlOperation } from "aws-amplify";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
+import { updateData } from "../graphql/mutations";
 import { datasByDate } from "../graphql/queries";
 import { onCreateData } from "../graphql/subscriptions";
 
@@ -14,45 +15,65 @@ import {
 	AmplifyContainer,
 } from "@aws-amplify/ui-react";
 
-const initialState = [
+const initialStates = [
 	{
 		id: "",
 		order: 0,
 		name: "",
 		firstName: "",
 		lastName: "",
-		position: "",
 		pScore: "",
 		rScore: "",
 		sScore: "",
 		tScore: "",
 		createdAt: "",
 		updatedAt: "",
+		pickUp: "N",
 	},
 ];
 
-// TODO order 추가해야 함
-// TODO "카드 수령" 추가해야 함 => 체크박스 같은 걸로 줬는지 저장해야 함
-
 const headers = [
 	{ label: "바코드", key: "id" },
+	{ label: "순서", key: "order" },
 	{ label: "이름", key: "name" },
+	{ label: "전화번호", key: "phoneNumber" },
+	{ label: "포지션", key: "position" },
 	{ label: "영어 성", key: "lastName" },
 	{ label: "영어 이름", key: "firstName" },
 	{ label: "SPEED", key: "rScore" },
 	{ label: "PASS", key: "pScore" },
 	{ label: "SHOOT", key: "sScore" },
 	{ label: "TOTAL", key: "tScore" },
-	{ label: "생성 시간", key: "createdAt" },
-	{ label: "최근 변경 시간", key: "updatedAt" },
+	{ label: "등록시간", key: "createdAt" },
+	{ label: "최근변경시간", key: "updatedAt" },
+	{ label: "카드수령", key: "pickUp" },
 ];
 
 const Admin = (props) => {
-	const [datas, setDatas] = useState(initialState);
+	const nameInputRefs = useRef({});
+	const lastNameInputRefs = useRef({});
+	const firstNameInputRefs = useRef({});
+	const rScoreInputRefs = useRef({});
+	const pScoreInputRefs = useRef({});
+	const sScoreInputRefs = useRef({});
+	const tScoreInputRefs = useRef({});
+	const pickUpInputRefs = useRef({});
+
+	const nameBtnRefs = useRef({});
+	const lastNameBtnRefs = useRef({});
+	const firstNameBtnRefs = useRef({});
+	const rScoreBtnRefs = useRef({});
+	const pScoreBtnRefs = useRef({});
+	const sScoreBtnRefs = useRef({});
+	const tScoreBtnRefs = useRef({});
+	const pickUpBtnRefs = useRef({});
+
+	const csvLink = useRef();
+
+	const [datas, setDatas] = useState(initialStates);
 	const [csvDatas, setCsvDatas] = useState([]);
 
-	// TODO: 구해야 함
-	const [isDownloadLoading, setIsDownloadLoading] = useState(true);
+	const [formState, setFormState] = useState({});
 
 	useEffect(() => {
 		fetchDatas();
@@ -60,24 +81,20 @@ const Admin = (props) => {
 		API.graphql(graphqlOperation(onCreateData)).subscribe({
 			next: (evt) => {
 				const data = evt.value.data.onCreateData;
-				// TODO datas에 추가 및 삭제, csvDatas에 추가
+				fetchDatas();
 			},
 		});
-
-		fetchDownloadList();
 	}, []);
 
 	async function fetchDatas() {
 		const fechedDatas = await API.graphql({
 			query: datasByDate,
 			variables: {
-				limit: 20,
+				limit: 100,
 				type: "Data",
 				sortDirection: "DESC",
 			},
 		});
-
-		console.log(fechedDatas.data.datasByDate.items);
 
 		setDatas(fechedDatas.data.datasByDate.items);
 	}
@@ -92,7 +109,14 @@ const Admin = (props) => {
 		});
 
 		let resultList = [...fechedDatas.data.datasByDate.items];
-		setCsvDatas(resultList);
+
+		setCsvDatas(
+			resultList.map((data) => ({
+				...data,
+				createdAt: new Date(data.createdAt),
+				updatedAt: new Date(data.updatedAt),
+			})),
+		);
 
 		let nextToken = fechedDatas.data.datasByDate.nextToken;
 		while (nextToken) {
@@ -106,23 +130,146 @@ const Admin = (props) => {
 			});
 
 			resultList = [...resultList, ...fechedDatas.data.datasByDate.items];
-			setCsvDatas(resultList);
+			setCsvDatas(
+				resultList.map((data) => ({
+					...data,
+					createdAt: new Date(data.createdAt),
+					updatedAt: new Date(data.updatedAt),
+				})),
+			);
 
 			nextToken = fechedDatas.data.datasByDate.nextToken;
 		}
 
-		setIsDownloadLoading(false);
+		csvLink.current.link.click();
 	}
 
-	async function updateData(data) {
-		// const todoDetails = {
-		// 	id: "some_id",
-		// 	description: "My updated description!",
-		// };
-		// const updatedTodo = await API.graphql({
-		// 	query: updateData,
-		// 	variables: { input: todoDetails },
-		// });
+	function changeFormState(id, key, value) {
+		if (
+			formState.id &&
+			(formState.id !== id || formState.valueType !== key)
+		) {
+			if (formState.valueType === "name") {
+				nameBtnRefs.current[formState.id].style.display = "none";
+
+				nameInputRefs.current[formState.id].value =
+					nameInputRefs.current[formState.id].name;
+			} else if (formState.valueType === "lastName") {
+				lastNameBtnRefs.current[formState.id].style.display = "none";
+
+				lastNameInputRefs.current[formState.id].value =
+					lastNameInputRefs.current[formState.id].name;
+			} else if (formState.valueType === "firstName") {
+				firstNameBtnRefs.current[formState.id].style.display = "none";
+
+				firstNameInputRefs.current[formState.id].value =
+					firstNameInputRefs.current[formState.id].name;
+			} else if (formState.valueType === "pScore") {
+				pScoreBtnRefs.current[formState.id].style.display = "none";
+
+				pScoreInputRefs.current[formState.id].value =
+					pScoreInputRefs.current[formState.id].name;
+			} else if (formState.valueType === "rScore") {
+				rScoreBtnRefs.current[formState.id].style.display = "none";
+
+				rScoreInputRefs.current[formState.id].value =
+					rScoreInputRefs.current[formState.id].name;
+			} else if (formState.valueType === "sScore") {
+				sScoreBtnRefs.current[formState.id].style.display = "none";
+
+				sScoreInputRefs.current[formState.id].value =
+					sScoreInputRefs.current[formState.id].name;
+			} else if (formState.valueType === "tScore") {
+				tScoreBtnRefs.current[formState.id].style.display = "none";
+
+				tScoreInputRefs.current[formState.id].value =
+					tScoreInputRefs.current[formState.id].name;
+			} else if (formState.valueType === "pickUp") {
+				pickUpBtnRefs.current[formState.id].style.display = "none";
+
+				pickUpInputRefs.current[formState.id].value =
+					pickUpInputRefs.current[formState.id].name;
+			}
+		}
+
+		setFormState({ id: id, [key]: value, valueType: key });
+
+		if (key === "name") {
+			nameBtnRefs.current[id].style.display = "inline-block";
+		} else if (key === "lastName") {
+			lastNameBtnRefs.current[id].style.display = "inline-block";
+		} else if (key === "firstName") {
+			firstNameBtnRefs.current[id].style.display = "inline-block";
+		} else if (key === "pScore") {
+			pScoreBtnRefs.current[id].style.display = "inline-block";
+		} else if (key === "rScore") {
+			rScoreBtnRefs.current[id].style.display = "inline-block";
+		} else if (key === "sScore") {
+			sScoreBtnRefs.current[id].style.display = "inline-block";
+		} else if (key === "tScore") {
+			tScoreBtnRefs.current[id].style.display = "inline-block";
+		} else if (key === "pickUp") {
+			pickUpBtnRefs.current[id].style.display = "inline-block";
+		} else {
+			alert(
+				"수정 중 오류가 발생했습니다. 동일한 문제가 발생할 경우 관리자에게 문의바랍니다.",
+			);
+		}
+	}
+
+	async function update(id, key) {
+		try {
+			delete formState.valueType;
+
+			await API.graphql({
+				query: updateData,
+				variables: {
+					input: formState,
+				},
+			});
+
+			if (key === "name") {
+				nameBtnRefs.current[id].style.display = "none";
+			} else if (key === "lastName") {
+				lastNameBtnRefs.current[id].style.display = "none";
+			} else if (key === "firstName") {
+				firstNameBtnRefs.current[id].style.display = "none";
+			} else if (key === "pScore") {
+				pScoreBtnRefs.current[id].style.display = "none";
+			} else if (key === "rScore") {
+				rScoreBtnRefs.current[id].style.display = "none";
+			} else if (key === "sScore") {
+				sScoreBtnRefs.current[id].style.display = "none";
+			} else if (key === "tScore") {
+				tScoreBtnRefs.current[id].style.display = "none";
+			} else if (key === "pickUp") {
+				pickUpBtnRefs.current[id].style.display = "none";
+			}
+		} catch (error) {
+			alert(
+				"문제가 발생하였습니다. 올바른 값을 입력했는지 확인해주세요.",
+			);
+
+			console.error(error);
+
+			if (key === "name") {
+				nameBtnRefs.current[id].style.display = "none";
+			} else if (key === "lastName") {
+				lastNameBtnRefs.current[id].style.display = "none";
+			} else if (key === "firstName") {
+				firstNameBtnRefs.current[id].style.display = "none";
+			} else if (key === "pScore") {
+				pScoreBtnRefs.current[id].style.display = "none";
+			} else if (key === "rScore") {
+				rScoreBtnRefs.current[id].style.display = "none";
+			} else if (key === "sScore") {
+				sScoreBtnRefs.current[id].style.display = "none";
+			} else if (key === "tScore") {
+				tScoreBtnRefs.current[id].style.display = "none";
+			} else if (key === "pickUp") {
+				pickUpBtnRefs.current[id].style.display = "none";
+			}
+		}
 	}
 
 	return (
@@ -131,27 +278,31 @@ const Admin = (props) => {
 				<AmplifySignIn slot="sign-in" hideSignUp></AmplifySignIn>
 				<div>
 					<h1>Nike Football Studio Admin</h1>
-
 					<div className="csv_link">
+						<button onClick={fetchDownloadList}>
+							전체 방문자 목록 다운로드
+						</button>
 						<CSVLink
+							ref={csvLink}
 							data={csvDatas}
 							headers={headers}
 							filename={`전체 방문자 목록_${new Date().getFullYear()}_${
 								new Date().getMonth() + 1
 							}_${new Date().getDate()}`}
-						>
-							<button disabled={isDownloadLoading}>
-								전체 방문자 목록 다운로드
-							</button>
-						</CSVLink>
+						></CSVLink>
 					</div>
 					<table>
 						<thead>
 							<tr>
-								{headers.map((col) => (
-									<th key={col.key}>{col.label}</th>
-								))}
-								<th></th>
+								{headers
+									.filter(
+										(col) =>
+											col.key !== "position" &&
+											col.key !== "phoneNumber",
+									)
+									.map((col) => (
+										<th key={col.key}>{col.label}</th>
+									))}
 							</tr>
 						</thead>
 						<tbody>
@@ -161,46 +312,232 @@ const Admin = (props) => {
 										{row.id}
 									</td>
 									<td style={{ textAlign: "center" }}>
-										<input
-											type="text"
-											value={row.name}
-										></input>
+										{row.order}
 									</td>
 									<td style={{ textAlign: "center" }}>
 										<input
 											type="text"
-											value={row.lastName}
+											defaultValue={row.name}
+											name={row.name}
+											ref={(ref) =>
+												(nameInputRefs.current[row.id] =
+													ref)
+											}
+											onChange={(event) =>
+												changeFormState(
+													row.id,
+													"name",
+													event.target.value,
+												)
+											}
 										></input>
+										<button
+											className="btn_update"
+											ref={(ref) =>
+												(nameBtnRefs.current[row.id] =
+													ref)
+											}
+											onClick={(event) =>
+												update(row.id, "name")
+											}
+											style={{ display: "none" }}
+										>
+											수정
+										</button>
 									</td>
 									<td style={{ textAlign: "center" }}>
 										<input
 											type="text"
-											value={row.firstName}
+											defaultValue={row.lastName}
+											name={row.lastName}
+											ref={(ref) =>
+												(lastNameInputRefs.current[
+													row.id
+												] = ref)
+											}
+											onChange={(event) =>
+												changeFormState(
+													row.id,
+													"lastName",
+													event.target.value,
+												)
+											}
 										></input>
+										<button
+											className="btn_update"
+											ref={(ref) =>
+												(lastNameBtnRefs.current[
+													row.id
+												] = ref)
+											}
+											onClick={(event) =>
+												update(row.id, "lastName")
+											}
+											style={{ display: "none" }}
+										>
+											수정
+										</button>
 									</td>
 									<td style={{ textAlign: "center" }}>
 										<input
 											type="text"
-											value={row.rScore}
+											defaultValue={row.firstName}
+											name={row.firstName}
+											ref={(ref) =>
+												(firstNameInputRefs.current[
+													row.id
+												] = ref)
+											}
+											onChange={(event) =>
+												changeFormState(
+													row.id,
+													"firstName",
+													event.target.value,
+												)
+											}
 										></input>
+										<button
+											className="btn_update"
+											ref={(ref) =>
+												(firstNameBtnRefs.current[
+													row.id
+												] = ref)
+											}
+											onClick={(event) =>
+												update(row.id, "firstName")
+											}
+											style={{ display: "none" }}
+										>
+											수정
+										</button>
 									</td>
 									<td style={{ textAlign: "center" }}>
 										<input
 											type="text"
-											value={row.pScore}
+											defaultValue={row.rScore}
+											name={row.rScore}
+											ref={(ref) =>
+												(rScoreInputRefs.current[
+													row.id
+												] = ref)
+											}
+											onChange={(event) =>
+												changeFormState(
+													row.id,
+													"rScore",
+													event.target.value,
+												)
+											}
 										></input>
+										<button
+											className="btn_update"
+											ref={(ref) =>
+												(rScoreBtnRefs.current[row.id] =
+													ref)
+											}
+											onClick={(event) =>
+												update(row.id, "rScore")
+											}
+											style={{ display: "none" }}
+										>
+											수정
+										</button>
 									</td>
 									<td style={{ textAlign: "center" }}>
 										<input
 											type="text"
-											value={row.sScore}
+											defaultValue={row.pScore}
+											name={row.pScore}
+											ref={(ref) =>
+												(pScoreInputRefs.current[
+													row.id
+												] = ref)
+											}
+											onChange={(event) =>
+												changeFormState(
+													row.id,
+													"pScore",
+													event.target.value,
+												)
+											}
 										></input>
+										<button
+											className="btn_update"
+											ref={(ref) =>
+												(pScoreBtnRefs.current[row.id] =
+													ref)
+											}
+											onClick={(event) =>
+												update(row.id, "pScore")
+											}
+											style={{ display: "none" }}
+										>
+											수정
+										</button>
 									</td>
 									<td style={{ textAlign: "center" }}>
 										<input
 											type="text"
-											value={row.tScore}
+											defaultValue={row.sScore}
+											name={row.sScore}
+											ref={(ref) =>
+												(sScoreInputRefs.current[
+													row.id
+												] = ref)
+											}
+											onChange={(event) =>
+												changeFormState(
+													row.id,
+													"sScore",
+													event.target.value,
+												)
+											}
 										></input>
+										<button
+											className="btn_update"
+											ref={(ref) =>
+												(sScoreBtnRefs.current[row.id] =
+													ref)
+											}
+											onClick={(event) =>
+												update(row.id, "sScore")
+											}
+											style={{ display: "none" }}
+										>
+											수정
+										</button>
+									</td>
+									<td style={{ textAlign: "center" }}>
+										<input
+											type="text"
+											defaultValue={row.tScore}
+											name={row.tScore}
+											ref={(ref) =>
+												(tScoreInputRefs.current[
+													row.id
+												] = ref)
+											}
+											onChange={(event) =>
+												changeFormState(
+													row.id,
+													"tScore",
+													event.target.value,
+												)
+											}
+										></input>
+										<button
+											className="btn_update"
+											ref={(ref) =>
+												(tScoreBtnRefs.current[row.id] =
+													ref)
+											}
+											onClick={(event) =>
+												update(row.id, "tScore")
+											}
+											style={{ display: "none" }}
+										>
+											수정
+										</button>
 									</td>
 									<td
 										style={{
@@ -245,13 +582,43 @@ const Admin = (props) => {
 										).getSeconds()}`}
 									</td>
 									<td
-										onClick={() => updateData(row)}
 										style={{
 											textAlign: "center",
 											paddingTop: 0,
 										}}
 									>
-										수정
+										<select
+											defaultValue={row.pickUp}
+											name={row.pickUp}
+											ref={(ref) =>
+												(pickUpInputRefs.current[
+													row.id
+												] = ref)
+											}
+											onChange={(event) =>
+												changeFormState(
+													row.id,
+													"pickUp",
+													event.target.value,
+												)
+											}
+										>
+											<option value="Y">Y</option>
+											<option value="N">N</option>
+										</select>
+										<button
+											className="btn_update"
+											ref={(ref) =>
+												(pickUpBtnRefs.current[row.id] =
+													ref)
+											}
+											onClick={(event) =>
+												update(row.id, "pickUp")
+											}
+											style={{ display: "none" }}
+										>
+											수정
+										</button>
 									</td>
 								</tr>
 							))}

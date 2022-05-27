@@ -17,6 +17,7 @@ export const onCreateData = /* GraphQL */ `
       sScore
       tScore
       createdAt
+      pickUp
       updatedAt
     }
   }
@@ -37,6 +38,7 @@ export const onUpdateData = /* GraphQL */ `
       sScore
       tScore
       createdAt
+      pickUp
       updatedAt
     }
   }
@@ -57,6 +59,7 @@ export const onDeleteData = /* GraphQL */ `
       sScore
       tScore
       createdAt
+      pickUp
       updatedAt
     }
   }

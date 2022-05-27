@@ -3,16 +3,21 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import "../css/default.css";
 
+let timer;
+
 const Completed = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
-		setTimeout(moveInit, 5000);
+		timer = setTimeout(() => {
+			navigate("/");
+		}, 5000);
 	}, []);
 
 	function moveInit() {
+		clearTimeout(timer);
 		navigate("/");
 	}
 

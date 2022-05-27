@@ -50,7 +50,8 @@ exports.handler = async (event) => {
 			},
 		});
 
-		// console.log(`Query Result: ${JSON.stringify(getResult.data)}`);
+		let data = getResult.data.data.getData;
+		data = { ...data, order: String(data.order).padStart(4, "0") };
 
 		return {
 			statusCode: 200,
@@ -59,7 +60,7 @@ exports.handler = async (event) => {
 				"Access-Control-Allow-Headers": "*",
 			},
 			body: JSON.stringify({
-				getData: getResult.data.data.getData,
+				getData: data,
 				message: "Success!",
 			}),
 		};

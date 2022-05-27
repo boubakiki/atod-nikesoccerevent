@@ -17,6 +17,7 @@ export const getData = /* GraphQL */ `
       sScore
       tScore
       createdAt
+      pickUp
       updatedAt
     }
   }
@@ -42,6 +43,7 @@ export const listDatas = /* GraphQL */ `
         sScore
         tScore
         createdAt
+        pickUp
         updatedAt
       }
       nextToken
@@ -106,6 +108,7 @@ export const datasByDate = /* GraphQL */ `
         sScore
         tScore
         createdAt
+        pickUp
         updatedAt
       }
       nextToken

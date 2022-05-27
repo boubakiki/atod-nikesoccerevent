@@ -12,12 +12,13 @@ type Data
 	firstName: String!
 	lastName: String!
 	phoneNumber: String!
-	position: String
+	position: String!
 	pScore: String
 	rScore: String
 	sScore: String
 	tScore: String
 	createdAt: String!
+	pickUp: String
 }
 
 type Total @model {
