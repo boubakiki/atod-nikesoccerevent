@@ -118,7 +118,7 @@ const Register = () => {
 		const storageKey = formState.phoneNumber + ".jpg";
 		const barcode = barcodeRef.current;
 		domtoimage
-			.toJpeg(barcode, { quality: 0.95 })
+			.toJpeg(barcode, { quality: 0.5 })
 			.then(async function (dataUrl) {
 				var arr = dataUrl.split(","),
 					mime = arr[0].match(/:(.*?);/)[1],

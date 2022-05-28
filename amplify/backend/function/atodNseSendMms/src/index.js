@@ -50,50 +50,50 @@ exports.handler = (event) => {
 
 				let fileId;
 
-				await axios({
-					url: "https://api.coolsms.co.kr/storage/v1/files",
-					headers: {
-						Authorization: `HMAC-SHA256 apiKey=${key}, date=${datetime}, salt=${salt}, signature=${signature}`,
-						"Content-Type": "application/json",
-					},
-					method: "post",
-					data: {
-						file: imageObject[0].Body.toString("base64"),
-						type: "MMS",
-					},
-				})
-					.then((res) => {
-						console.log(res);
-						fileId = res.data.fileId;
-					})
-					.catch((err) => {
-						console.error(err);
-					});
+				// await axios({
+				// 	url: "https://api.coolsms.co.kr/storage/v1/files",
+				// 	headers: {
+				// 		Authorization: `HMAC-SHA256 apiKey=${key}, date=${datetime}, salt=${salt}, signature=${signature}`,
+				// 		"Content-Type": "application/json",
+				// 	},
+				// 	method: "post",
+				// 	data: {
+				// 		file: imageObject[0].Body.toString("base64"),
+				// 		type: "MMS",
+				// 	},
+				// })
+				// 	.then((res) => {
+				// 		console.log(res);
+				// 		fileId = res.data.fileId;
+				// 	})
+				// 	.catch((err) => {
+				// 		console.error(err);
+				// 	});
 
-				await axios({
-					url: "http://api.coolsms.co.kr/messages/v4/send",
-					method: "post",
-					headers: {
-						Authorization: `HMAC-SHA256 apiKey=${key}, date=${datetime}, salt=${salt}, signature=${signature}`,
-						"Content-Type": "application/json",
-					},
-					data: {
-						message: {
-							to: phoneNumber,
-							from: "025757131",
-							// subject: "나이키풋볼이벤트테스트",
-							text: "NIKE FOOTBALL STUDIO",
-							type: "MMS",
-							imageId: fileId,
-						},
-					},
-				})
-					.then((res) => {
-						console.log(res);
-					})
-					.catch((err) => {
-						console.error(err);
-					});
+				// await axios({
+				// 	url: "http://api.coolsms.co.kr/messages/v4/send",
+				// 	method: "post",
+				// 	headers: {
+				// 		Authorization: `HMAC-SHA256 apiKey=${key}, date=${datetime}, salt=${salt}, signature=${signature}`,
+				// 		"Content-Type": "application/json",
+				// 	},
+				// 	data: {
+				// 		message: {
+				// 			to: phoneNumber,
+				// 			from: "025757131",
+				// 			// subject: "나이키풋볼이벤트테스트",
+				// 			text: "NIKE FOOTBALL STUDIO",
+				// 			type: "MMS",
+				// 			imageId: fileId,
+				// 		},
+				// 	},
+				// })
+				// 	.then((res) => {
+				// 		console.log(res);
+				// 	})
+				// 	.catch((err) => {
+				// 		console.error(err);
+				// 	});
 			}
 		});
 		return {
