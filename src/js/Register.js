@@ -116,9 +116,10 @@ const Register = () => {
 		}
 
 		const storageKey = formState.phoneNumber + ".jpg";
-		const barcode = barcodeRef.current;
+		// const barcode = barcodeRef.current;
+
 		domtoimage
-			.toJpeg(barcode, { quality: 0.9 })
+			.toJpeg(document.querySelector(".barcode_area"), { quality: 0.95 })
 			.then(async function (dataUrl) {
 				var arr = dataUrl.split(","),
 					mime = arr[0].match(/:(.*?);/)[1],
@@ -141,10 +142,42 @@ const Register = () => {
 				setDisabled(false);
 				navigate("/complete?n=" + encodeURIComponent(formState.name));
 			});
+
+		// domtoimage
+		// 	.toJpeg(barcode, { quality: 0.95 })
+		// 	.then(async function (dataUrl) {
+		// 		var arr = dataUrl.split(","),
+		// 			mime = arr[0].match(/:(.*?);/)[1],
+		// 			bstr = atob(arr[1]),
+		// 			n = bstr.length,
+		// 			u8arr = new Uint8Array(n);
+		// 		while (n--) {
+		// 			u8arr[n] = bstr.charCodeAt(n);
+		// 		}
+		// 		const result = await Storage.put(
+		// 			storageKey,
+		// 			new File([u8arr], storageKey, { type: mime }),
+		// 			{
+		// 				contentType: "image/jpeg",
+		// 			},
+		// 		);
+
+		// 		console.log(result);
+		// 		setRegistText("선수 등록");
+		// 		setDisabled(false);
+		// 		navigate("/complete?n=" + encodeURIComponent(formState.name));
+		// 	});
 	}
 
 	function setInput(key, value) {
-		setFormState({ ...formState, [key]: value });
+		if (key === "lastName" || key === "firstName") {
+			setFormState({
+				...formState,
+				[key]: value.replace(/[^A-Za-z]/gi, ""),
+			});
+		} else {
+			setFormState({ ...formState, [key]: value });
+		}
 	}
 
 	function moveInit() {
