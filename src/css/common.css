@@ -290,7 +290,7 @@ input[type="checkbox"]:checked + label span.round {
     font-weight: 500;
     /* font-size: 1px; */
     position: absolute;
-    top:1vw;
+    top:0.3vw;
     right:3vw;
 }
 
@@ -298,7 +298,7 @@ input[type="checkbox"]:checked + label span.round {
     width:12vw;
     height: 2vw;
     background: #168;
-    border-radius: 20px;
+    border-radius: 5px;
     font-family: 'SUIT';
     font-weight: 500;
     font-size: 1vw;
@@ -391,7 +391,7 @@ tbody tr:hover td {
 }
 
 .btn_update {
-    width:1.8vw;
+    width:3.5vw;
     margin-top: 8px;
     border: solid 1px #168;
     margin-left: 1px;
@@ -402,7 +402,6 @@ tbody tr:hover td {
     font-size: 14px;
     color: #168;
 }
-
 
 /* ---------------------- TEXT ALIGN ------------------------- */
 .text-left {

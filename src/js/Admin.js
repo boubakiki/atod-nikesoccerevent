@@ -4,6 +4,8 @@ import { API, graphqlOperation } from "aws-amplify";
 
 import React, { useEffect, useState, useRef } from "react";
 
+import toast, { Toaster } from "react-hot-toast";
+
 import { updateData } from "../graphql/mutations";
 import { datasByDate } from "../graphql/queries";
 import { onCreateData } from "../graphql/subscriptions";
@@ -245,6 +247,8 @@ const Admin = (props) => {
 			} else if (key === "pickUp") {
 				pickUpBtnRefs.current[id].style.display = "none";
 			}
+
+			notify();
 		} catch (error) {
 			alert(
 				"문제가 발생하였습니다. 올바른 값을 입력했는지 확인해주세요.",
@@ -271,6 +275,8 @@ const Admin = (props) => {
 			}
 		}
 	}
+
+	const notify = () => toast("값이 수정되었습니다.");
 
 	return (
 		<AmplifyContainer>
@@ -625,7 +631,18 @@ const Admin = (props) => {
 						</tbody>
 					</table>
 				</div>
-				{/* <AmplifySignOut></AmplifySignOut> */}
+				<Toaster
+					toastOptions={{
+						duration: 1000,
+						position: "top-center",
+						style: {
+							border: "1px solid #168",
+							// padding: "1px",
+							color: "#168",
+							fontSize: "15px",
+						},
+					}}
+				/>
 			</AmplifyAuthenticator>
 		</AmplifyContainer>
 	);
