@@ -290,27 +290,28 @@ input[type="checkbox"]:checked + label span.round {
     font-weight: 500;
     /* font-size: 1px; */
     position: absolute;
-    top:0.3vw;
+    top:20px;
     right:3vw;
 }
 
 .csv_link button {
-    width:12vw;
-    height: 2vw;
+    /* width:12vw; */
+    padding: 6px;
+    /* height: 20px; */
     background: #168;
     border-radius: 5px;
     font-family: 'SUIT';
     font-weight: 500;
-    font-size: 1vw;
+    font-size: 15px;
     color: #fff;
 }
 
 h1 {
     font-family: 'SUIT';
     font-weight: 500;
-    font-size: 2.8vw;
+    font-size: 40px;
     position: absolute;
-    top:0;
+    top:10px;
     left:2.5vw;
 }
 
@@ -337,7 +338,7 @@ table {
     border-top: 3px solid #168;
     width: 95vw;
     position: absolute;
-    top:3.5vw;
+    top:70px;
     left:2.5vw;
     font-family: 'SUIT';
     font-weight: 500;
