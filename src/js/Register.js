@@ -11,7 +11,8 @@ import { v4 as uuid } from "uuid";
 import "../css/default.css";
 
 import Barcode from "react-barcode";
-import domtoimage from "dom-to-image";
+// import domtoimage from "dom-to-image";
+import html2canvas from "html2canvas";
 
 const initialState = {
 	id: "",
@@ -123,36 +124,60 @@ const Register = () => {
 		}
 
 		const storageKey = formState.phoneNumber + ".jpg";
-		// const barcode = barcodeRef.current;
 
-		domtoimage
-			.toJpeg(document.querySelector(".barcode_area"), { quality: 0.99 })
-			.then(function (dataUrl) {
-				const timer = setTimeout(async () => {
-					var arr = dataUrl.split(","),
-						mime = arr[0].match(/:(.*?);/)[1],
-						bstr = atob(arr[1]),
-						n = bstr.length,
-						u8arr = new Uint8Array(n);
-					while (n--) {
-						u8arr[n] = bstr.charCodeAt(n);
-					}
-					const result = await Storage.put(
-						storageKey,
-						new File([u8arr], storageKey, { type: mime }),
-						{
-							contentType: "image/jpeg",
-						},
-					);
-					console.log(result);
-					setRegistText("선수 등록");
-					setDisabled(false);
-					setBarcodeView("none");
-					navigate(
-						"/complete?n=" + encodeURIComponent(formState.name),
-					);
-				}, 5000);
-			});
+		html2canvas(document.querySelector(".barcode_area")).then(
+			async (canvas) => {
+				const dataUrl = canvas.toDataURL("image/jpeg");
+
+				var arr = dataUrl.split(","),
+					mime = arr[0].match(/:(.*?);/)[1],
+					bstr = atob(arr[1]),
+					n = bstr.length,
+					u8arr = new Uint8Array(n);
+				while (n--) {
+					u8arr[n] = bstr.charCodeAt(n);
+				}
+
+				const result = await Storage.put(
+					storageKey,
+					new File([u8arr], storageKey, { type: mime }),
+					{
+						contentType: "image/jpeg",
+					},
+				);
+
+				console.log(result);
+				setRegistText("선수 등록");
+				setDisabled(false);
+				setBarcodeView("none");
+				navigate("/complete?n=" + encodeURIComponent(formState.name));
+			},
+		);
+
+		// domtoimage
+		// 	.toJpeg(document.querySelector(".barcode_area"), { quality: 0.99 })
+		// 	.then(async function (dataUrl) {
+		// 		var arr = dataUrl.split(","),
+		// 			mime = arr[0].match(/:(.*?);/)[1],
+		// 			bstr = atob(arr[1]),
+		// 			n = bstr.length,
+		// 			u8arr = new Uint8Array(n);
+		// 		while (n--) {
+		// 			u8arr[n] = bstr.charCodeAt(n);
+		// 		}
+		// 		const result = await Storage.put(
+		// 			storageKey,
+		// 			new File([u8arr], storageKey, { type: mime }),
+		// 			{
+		// 				contentType: "image/jpeg",
+		// 			},
+		// 		);
+		// 		console.log(result);
+		// 		setRegistText("선수 등록");
+		// 		setDisabled(false);
+		// 		setBarcodeView("none");
+		// 		navigate("/complete?n=" + encodeURIComponent(formState.name));
+		// 	});
 	}
 
 	function setInput(key, value) {
@@ -222,8 +247,8 @@ const Register = () => {
 				ref={barcodeRef}
 				style={{
 					position: "absolute",
-					width: "378px",
-					height: "514px",
+					width: "380px",
+					height: "517px",
 					left: "0vw",
 					backgroundImage: "url(../img/barcode_frame.png)",
 					backgroundSize: "cover",
