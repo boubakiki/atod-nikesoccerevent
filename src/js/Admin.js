@@ -283,7 +283,7 @@ const Admin = (props) => {
 			<AmplifyAuthenticator>
 				<AmplifySignIn slot="sign-in" hideSignUp></AmplifySignIn>
 				<div>
-					<h1>Nike Football Studio Admin</h1>
+					<h1>NIKE FOOTBALL STUDIO ADMIN</h1>
 					<div className="csv_link">
 						<button onClick={fetchDownloadList}>
 							전체 방문자 목록 다운로드
