@@ -126,7 +126,7 @@ const Register = () => {
 		// const barcode = barcodeRef.current;
 
 		domtoimage
-			.toJpeg(document.querySelector(".barcode_area"), { quality: 0.98 })
+			.toJpeg(document.querySelector(".barcode_area"), { quality: 0.99 })
 			.then(function (dataUrl) {
 				const timer = setTimeout(async () => {
 					var arr = dataUrl.split(","),
@@ -151,7 +151,7 @@ const Register = () => {
 					navigate(
 						"/complete?n=" + encodeURIComponent(formState.name),
 					);
-				}, 1500);
+				}, 3000);
 			});
 
 		// domtoimage
