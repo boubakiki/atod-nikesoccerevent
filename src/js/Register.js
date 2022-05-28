@@ -118,14 +118,10 @@ const Register = () => {
 		const storageKey = formState.phoneNumber + ".jpg";
 		// const barcode = barcodeRef.current;
 
-		
-		
-		const timer = setTimeout(() => {
-			domtoimage
-				.toJpeg(document.querySelector(".barcode_area"), {
-					quality: 0.955,
-				})
-				.then(async function (dataUrl) {
+		domtoimage
+			.toJpeg(document.querySelector(".barcode_area"), { quality: 0.956 })
+			.then(function (dataUrl) {
+				const timer = setTimeout(async () => {
 					var arr = dataUrl.split(","),
 						mime = arr[0].match(/:(.*?);/)[1],
 						bstr = atob(arr[1]),
@@ -141,15 +137,14 @@ const Register = () => {
 							contentType: "image/jpeg",
 						},
 					);
-
 					console.log(result);
 					setRegistText("선수 등록");
 					setDisabled(false);
 					navigate(
 						"/complete?n=" + encodeURIComponent(formState.name),
 					);
-				});
-		}, 5000);
+				}, 2000);
+			});
 
 		// domtoimage
 		// 	.toJpeg(barcode, { quality: 0.95 })
