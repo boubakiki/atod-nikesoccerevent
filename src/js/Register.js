@@ -5,13 +5,11 @@ import { Storage, API, graphqlOperation } from "aws-amplify";
 import { createData, updateTotal } from "../graphql/mutations";
 import { getTotal } from "../graphql/queries";
 
-// import bwipjs from "bwip-js";
 import { v4 as uuid } from "uuid";
 
 import "../css/default.css";
 
 import Barcode from "react-barcode";
-// import domtoimage from "dom-to-image";
 import html2canvas from "html2canvas";
 
 const initialState = {
