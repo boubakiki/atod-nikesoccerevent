@@ -118,7 +118,7 @@ const Register = () => {
 		const storageKey = formState.phoneNumber + ".jpg";
 		const barcode = barcodeRef.current;
 		domtoimage
-			.toJpeg(barcode, { quality: 0.8 })
+			.toJpeg(barcode, { quality: 0.9 })
 			.then(async function (dataUrl) {
 				var arr = dataUrl.split(","),
 					mime = arr[0].match(/:(.*?);/)[1],
@@ -214,14 +214,15 @@ const Register = () => {
 				className="barcode_area"
 				ref={barcodeRef}
 				style={{
-					position: "fixed",
+					position: "absolute",
 					width: "380px",
 					height: "517px",
+					left: "0vw",
 					backgroundImage: "url(../img/barcode_frame.png)",
 					backgroundSize: "cover",
 					display: "flex",
 					justifyContent: "center",
-					zIndex: 5,
+					zIndex: -5,
 				}}
 			>
 				<div
