@@ -67,6 +67,7 @@ const Register = () => {
 	const [key, setKey] = useState("init");
 	const [registText, setRegistText] = useState("선수 등록");
 	const [disabled, setDisabled] = useState(false);
+	const [barcodeView, setBarcodeView] = useState("none");
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
@@ -74,9 +75,15 @@ const Register = () => {
 
 	useEffect(() => {
 		if (key !== "init") {
-			uploadBarcode(key);
+			setBarcodeView("flex");
 		}
 	}, [key]);
+
+	useEffect(() => {
+		if (key !== "init" && barcodeView === "flex") {
+			uploadBarcode(key);
+		}
+	}, [barcodeView]);
 
 	async function uploadBarcode(key) {
 		try {
@@ -119,7 +126,7 @@ const Register = () => {
 		// const barcode = barcodeRef.current;
 
 		domtoimage
-			.toJpeg(document.querySelector(".barcode_area"), { quality: 0.956 })
+			.toJpeg(document.querySelector(".barcode_area"), { quality: 0.98 })
 			.then(function (dataUrl) {
 				const timer = setTimeout(async () => {
 					var arr = dataUrl.split(","),
@@ -140,10 +147,11 @@ const Register = () => {
 					console.log(result);
 					setRegistText("선수 등록");
 					setDisabled(false);
+					setBarcodeView("none");
 					navigate(
 						"/complete?n=" + encodeURIComponent(formState.name),
 					);
-				}, 2000);
+				}, 1500);
 			});
 
 		// domtoimage
@@ -256,7 +264,7 @@ const Register = () => {
 					left: "0vw",
 					backgroundImage: "url(../img/barcode_frame.png)",
 					backgroundSize: "cover",
-					display: "flex",
+					display: `${barcodeView}`,
 					justifyContent: "center",
 					zIndex: -5,
 				}}
