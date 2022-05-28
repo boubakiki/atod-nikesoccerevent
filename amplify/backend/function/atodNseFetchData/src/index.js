@@ -60,7 +60,7 @@ exports.handler = async (event) => {
 				"Access-Control-Allow-Headers": "*",
 			},
 			body: JSON.stringify({
-				getData: data,
+				...data,
 				message: "Success!",
 			}),
 		};

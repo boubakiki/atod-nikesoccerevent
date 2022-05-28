@@ -38,7 +38,7 @@
         },
         "atodNseFetchData": {
           "deploymentBucketName": "amplify-atodnikesoccerevent-dev-150448-deployment",
-          "s3Key": "amplify-builds/atodNseFetchData-72366d4d4d4744642f4e-build.zip"
+          "s3Key": "amplify-builds/atodNseFetchData-4e4c794f6a774e4e7347-build.zip"
         }
       }
     }

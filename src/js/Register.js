@@ -151,33 +151,8 @@ const Register = () => {
 					navigate(
 						"/complete?n=" + encodeURIComponent(formState.name),
 					);
-				}, 3000);
+				}, 5000);
 			});
-
-		// domtoimage
-		// 	.toJpeg(barcode, { quality: 0.95 })
-		// 	.then(async function (dataUrl) {
-		// 		var arr = dataUrl.split(","),
-		// 			mime = arr[0].match(/:(.*?);/)[1],
-		// 			bstr = atob(arr[1]),
-		// 			n = bstr.length,
-		// 			u8arr = new Uint8Array(n);
-		// 		while (n--) {
-		// 			u8arr[n] = bstr.charCodeAt(n);
-		// 		}
-		// 		const result = await Storage.put(
-		// 			storageKey,
-		// 			new File([u8arr], storageKey, { type: mime }),
-		// 			{
-		// 				contentType: "image/jpeg",
-		// 			},
-		// 		);
-
-		// 		console.log(result);
-		// 		setRegistText("선수 등록");
-		// 		setDisabled(false);
-		// 		navigate("/complete?n=" + encodeURIComponent(formState.name));
-		// 	});
 	}
 
 	function setInput(key, value) {
@@ -238,18 +213,6 @@ const Register = () => {
 		const shortID = uniqueID.slice(0, 13).replaceAll("-", "");
 
 		setKey(shortID);
-
-		// let canvas = bwipjs.toCanvas("barcode", {
-		// 	bcid: "code128", // Barcode type
-		// 	text: shortID,
-		// 	scale: 1, // 3x scaling factor
-		// 	height: 15, // Bar height, in millimeters
-		// 	includetext: true, // Show human-readable text
-		// 	textxalign: "center", // Always good to set this
-		// 	textsize: 15,
-		// 	paddingheight: 10,
-		// 	// rotate: "R",
-		// });
 	}
 
 	return (
@@ -259,8 +222,8 @@ const Register = () => {
 				ref={barcodeRef}
 				style={{
 					position: "absolute",
-					width: "380px",
-					height: "517px",
+					width: "378px",
+					height: "514px",
 					left: "0vw",
 					backgroundImage: "url(../img/barcode_frame.png)",
 					backgroundSize: "cover",
