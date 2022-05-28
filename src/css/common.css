@@ -404,6 +404,17 @@ tbody tr:hover td {
     color: #168;
 }
 
+.barcode_area {
+    /* position: "absolute";
+    width: "380px";
+    height: "517px";
+    background-image: url(../img/barcode_frame.png) no-repeat;
+    background-size: "cover";
+    display: "flex";
+    justify-content: "center";
+    z-index: 5; */
+}
+
 /* ---------------------- TEXT ALIGN ------------------------- */
 .text-left {
     text-align: left;
