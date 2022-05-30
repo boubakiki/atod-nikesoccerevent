@@ -155,7 +155,7 @@ label {
 }
 
 .radio_content .radio_box:nth-child(3),  .radio_box:nth-child(4){
-    margin-bottom:50px;
+    margin-bottom:95px;
 }
 
 .radio_box {
@@ -278,7 +278,7 @@ input[type="checkbox"]:checked + label span.round {
     height: 35px;
     padding-left: 311px;
     padding-right: 312px;
-    margin-bottom: 135px;
+    margin-bottom: 104px;
     cursor:pointer;
 }
 
@@ -520,7 +520,7 @@ tbody tr:hover td {
     }
 
     .radio_content .radio_box:nth-child(3),  .radio_box:nth-child(4){
-        margin-bottom:50px;
+        margin-bottom:62px;
     }
 
     .radio_box {
@@ -613,7 +613,7 @@ tbody tr:hover td {
         height: 35px;
         padding-left: 223px;
         padding-right: 204px;
-        margin-bottom: 93px;
+        margin-bottom: 76px;
         cursor:pointer;
     }
 

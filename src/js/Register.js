@@ -62,7 +62,7 @@ const Register = () => {
 
 	const [formState, setFormState] = useState(initialState);
 	const [text, setText] = useState(initialText);
-	const [agree, setAgree] = useState(false);
+	// const [agree, setAgree] = useState(false);
 	const [key, setKey] = useState("init");
 	const [registText, setRegistText] = useState("선수 등록");
 	const [disabled, setDisabled] = useState(false);
@@ -199,10 +199,10 @@ const Register = () => {
 			return;
 		}
 
-		if (!agree) {
-			alert("이용 약관에 동의해야 합니다.");
-			return;
-		}
+		// if (!agree) {
+		// 	alert("이용 약관에 동의해야 합니다.");
+		// 	return;
+		// }
 
 		setRegistText("등록 중...");
 		setDisabled(true);
@@ -411,7 +411,7 @@ const Register = () => {
 							</span>
 						</div>
 					</div>
-					<div>
+					{/* <div>
 						<p className="label_text">이용약관</p>
 						<textarea defaultValue={text}></textarea>
 					</div>
@@ -429,7 +429,7 @@ const Register = () => {
 							<span className="round">체크박스</span>이용 약관에
 							동의합니다.
 						</label>
-					</div>
+					</div> */}
 					<p>
 						<button
 							className="btn_submit"
