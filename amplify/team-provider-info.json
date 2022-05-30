@@ -42,5 +42,37 @@
         }
       }
     }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-atodnikesoccerevent-prod-172853-authRole",
+      "UnauthRoleArn": "arn:aws:iam::618435685871:role/amplify-atodnikesoccerevent-prod-172853-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::618435685871:role/amplify-atodnikesoccerevent-prod-172853-authRole",
+      "Region": "ap-northeast-2",
+      "DeploymentBucketName": "amplify-atodnikesoccerevent-prod-172853-deployment",
+      "UnauthRoleName": "amplify-atodnikesoccerevent-prod-172853-unauthRole",
+      "StackName": "amplify-atodnikesoccerevent-prod-172853",
+      "StackId": "arn:aws:cloudformation:ap-northeast-2:618435685871:stack/amplify-atodnikesoccerevent-prod-172853/8bb83e30-dff2-11ec-b4a6-02bde2032c1a",
+      "AmplifyAppId": "d223ys0cwg3oll"
+    },
+    "categories": {
+      "auth": {
+        "atodnikesoccerevent59727a5f": {}
+      },
+      "function": {
+        "atodNseSendMms": {
+          "deploymentBucketName": "amplify-atodnikesoccerevent-prod-172853-deployment",
+          "s3Key": "amplify-builds/atodNseSendMms-37525330464a68316972-build.zip"
+        },
+        "atodNseSaveResult": {
+          "deploymentBucketName": "amplify-atodnikesoccerevent-prod-172853-deployment",
+          "s3Key": "amplify-builds/atodNseSaveResult-5a5233512f7565594846-build.zip"
+        },
+        "atodNseFetchData": {
+          "deploymentBucketName": "amplify-atodnikesoccerevent-prod-172853-deployment",
+          "s3Key": "amplify-builds/atodNseFetchData-4e4c794f6a774e4e7347-build.zip"
+        }
+      }
+    }
   }
 }
