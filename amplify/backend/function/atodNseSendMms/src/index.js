@@ -81,7 +81,7 @@ exports.handler = (event) => {
 						message: {
 							to: phoneNumber,
 							from: "025757131",
-							// subject: "나이키풋볼이벤트테스트",
+							subject: "[나이키 풋볼 스튜디오] 선수 등록",
 							text: "[나이키 풋볼 스튜디오] 선수 등록이 완료되었습니다.",
 							type: "MMS",
 							imageId: fileId,
