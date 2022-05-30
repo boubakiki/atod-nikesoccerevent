@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Storage, API, graphqlOperation } from "aws-amplify";
 import { createData, updateTotal } from "../graphql/mutations";
-import { getTotal } from "../graphql/queries";
+import { getTotal, getData } from "../graphql/queries";
 
 import { v4 as uuid } from "uuid";
 
@@ -151,31 +151,6 @@ const Register = () => {
 				navigate("/complete?n=" + encodeURIComponent(formState.name));
 			},
 		);
-
-		// domtoimage
-		// 	.toJpeg(document.querySelector(".barcode_area"), { quality: 0.99 })
-		// 	.then(async function (dataUrl) {
-		// 		var arr = dataUrl.split(","),
-		// 			mime = arr[0].match(/:(.*?);/)[1],
-		// 			bstr = atob(arr[1]),
-		// 			n = bstr.length,
-		// 			u8arr = new Uint8Array(n);
-		// 		while (n--) {
-		// 			u8arr[n] = bstr.charCodeAt(n);
-		// 		}
-		// 		const result = await Storage.put(
-		// 			storageKey,
-		// 			new File([u8arr], storageKey, { type: mime }),
-		// 			{
-		// 				contentType: "image/jpeg",
-		// 			},
-		// 		);
-		// 		console.log(result);
-		// 		setRegistText("선수 등록");
-		// 		setDisabled(false);
-		// 		setBarcodeView("none");
-		// 		navigate("/complete?n=" + encodeURIComponent(formState.name));
-		// 	});
 	}
 
 	function setInput(key, value) {
@@ -232,10 +207,30 @@ const Register = () => {
 		setRegistText("등록 중...");
 		setDisabled(true);
 
-		const uniqueID = uuid();
-		const shortID = uniqueID.slice(0, 13).replaceAll("-", "");
+		let uniqueID = uuid();
+		let shortID = uniqueID.slice(0, 13).replaceAll("-", "");
 
-		setKey(shortID);
+		// 중복 키인지 확인
+		const dataSearchResult = await API.graphql({
+			query: getData,
+			variables: { id: shortID },
+		});
+		let duplicated = dataSearchResult.data.getData;
+
+		if (duplicated) {
+			while (duplicated) {
+				uniqueID = uuid();
+				shortID = uniqueID.slice(0, 13).replaceAll("-", "");
+				const dataSearchResult = await API.graphql({
+					query: getData,
+					variables: { id: shortID },
+				});
+
+				duplicated = dataSearchResult.data.getData;
+			}
+		} else {
+			setKey(shortID);
+		}
 	}
 
 	return (
