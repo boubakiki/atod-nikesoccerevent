@@ -62,7 +62,7 @@
       "function": {
         "atodNseSendMms": {
           "deploymentBucketName": "amplify-atodnikesoccerevent-prod-172853-deployment",
-          "s3Key": "amplify-builds/atodNseSendMms-37525330464a68316972-build.zip"
+          "s3Key": "amplify-builds/atodNseSendMms-4f466848504942347239-build.zip"
         },
         "atodNseSaveResult": {
           "deploymentBucketName": "amplify-atodnikesoccerevent-prod-172853-deployment",
