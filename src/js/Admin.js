@@ -24,6 +24,7 @@ const initialStates = [
 		name: "",
 		firstName: "",
 		lastName: "",
+		position: "",
 		pScore: "",
 		rScore: "",
 		sScore: "",
@@ -37,9 +38,9 @@ const initialStates = [
 const headers = [
 	{ label: "바코드", key: "id" },
 	{ label: "순서", key: "order" },
+	{ label: "포지션", key: "position" },
 	{ label: "이름", key: "name" },
 	{ label: "전화번호", key: "phoneNumber" },
-	{ label: "포지션", key: "position" },
 	{ label: "영어 성", key: "lastName" },
 	{ label: "영어 이름", key: "firstName" },
 	{ label: "SPEED", key: "rScore" },
@@ -301,11 +302,7 @@ const Admin = (props) => {
 						<thead>
 							<tr>
 								{headers
-									.filter(
-										(col) =>
-											col.key !== "position" &&
-											col.key !== "phoneNumber",
-									)
+									.filter((col) => col.key !== "phoneNumber")
 									.map((col) => (
 										<th key={col.key}>{col.label}</th>
 									))}
@@ -319,6 +316,9 @@ const Admin = (props) => {
 									</td>
 									<td style={{ textAlign: "center" }}>
 										{row.order}
+									</td>
+									<td style={{ textAlign: "center" }}>
+										{row.position}
 									</td>
 									<td style={{ textAlign: "center" }}>
 										<input
