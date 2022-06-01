@@ -217,20 +217,17 @@ const Register = () => {
 		});
 		let duplicated = dataSearchResult.data.getData;
 
-		if (duplicated) {
-			while (duplicated) {
-				uniqueID = uuid();
-				shortID = uniqueID.slice(0, 13).replaceAll("-", "");
-				const dataSearchResult = await API.graphql({
-					query: getData,
-					variables: { id: shortID },
-				});
+		while (duplicated) {
+			uniqueID = uuid();
+			shortID = uniqueID.slice(0, 13).replaceAll("-", "");
+			const dataSearchResult = await API.graphql({
+				query: getData,
+				variables: { id: shortID },
+			});
 
-				duplicated = dataSearchResult.data.getData;
-			}
-		} else {
-			setKey(shortID);
+			duplicated = dataSearchResult.data.getData;
 		}
+		setKey(shortID);
 	}
 
 	return (
