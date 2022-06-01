@@ -8,7 +8,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { updateData } from "../graphql/mutations";
 import { datasByDate } from "../graphql/queries";
-import { onCreateData } from "../graphql/subscriptions";
+import { onCreateData, OnUpdateData } from "../graphql/subscriptions";
 
 import {
 	AmplifyAuthenticator,
@@ -84,6 +84,13 @@ const Admin = (props) => {
 		API.graphql(graphqlOperation(onCreateData)).subscribe({
 			next: (evt) => {
 				const data = evt.value.data.onCreateData;
+				fetchDatas();
+			},
+		});
+
+		API.graphql(graphqlOperation(OnUpdateData)).subscribe({
+			next: (evt) => {
+				// const data = evt.value.data.OnUpdateData;
 				fetchDatas();
 			},
 		});
