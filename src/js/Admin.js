@@ -100,7 +100,7 @@ const Admin = (props) => {
 		const fechedDatas = await API.graphql({
 			query: datasByDate,
 			variables: {
-				limit: 100,
+				limit: 1000,
 				type: "Data",
 				sortDirection: "DESC",
 			},
