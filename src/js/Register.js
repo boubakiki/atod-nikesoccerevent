@@ -62,7 +62,6 @@ const Register = () => {
 
 	const [formState, setFormState] = useState(initialState);
 	const [text, setText] = useState(initialText);
-	// const [agree, setAgree] = useState(false);
 	const [key, setKey] = useState("init");
 	const [registText, setRegistText] = useState("선수 등록");
 	const [disabled, setDisabled] = useState(false);
@@ -75,6 +74,9 @@ const Register = () => {
 	useEffect(() => {
 		if (key !== "init") {
 			setBarcodeView("flex");
+		} else {
+			setRegistText("선수 등록");
+			setDisabled(false);
 		}
 	}, [key]);
 
@@ -144,7 +146,6 @@ const Register = () => {
 					},
 				);
 
-				console.log(result);
 				setRegistText("선수 등록");
 				setDisabled(false);
 				setBarcodeView("none");
@@ -165,6 +166,9 @@ const Register = () => {
 	}
 
 	function moveInit() {
+		setRegistText("선수 등록");
+		setDisabled(false);
+		setBarcodeView("none");
 		navigate("/");
 	}
 
@@ -408,25 +412,6 @@ const Register = () => {
 							</span>
 						</div>
 					</div>
-					{/* <div>
-						<p className="label_text">이용약관</p>
-						<textarea defaultValue={text}></textarea>
-					</div>
-					<div className="checkbox_box">
-						<input
-							type="checkbox"
-							id="agree"
-							name="agree"
-							onChange={(event) => {
-								setAgree(event.target.checked);
-							}}
-							value={agree}
-						></input>
-						<label htmlFor="agree">
-							<span className="round">체크박스</span>이용 약관에
-							동의합니다.
-						</label>
-					</div> */}
 					<p>
 						<button
 							className="btn_submit"
